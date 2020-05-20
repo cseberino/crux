@@ -1,0 +1,7 @@
+Crux Lisp
+
+core functions:
+ noeval, if, def, func, macro, atom, equal, first, rest, append, add, negate, gt
+
+core functions with invocations involving special evaluation procedures:
+ noeval, if, def, func, macro
