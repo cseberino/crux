@@ -1,7 +1,30 @@
-Crux Lisp
+Crux
 
-core functions:
- noeval, if, def, func, macro, atom, equal, first, rest, append, add, negate, gt
+a minimal Lisp variant
 
-core functions with invocations involving special evaluation procedures:
- noeval, if, def, func, macro
+One of the simplest practical programming languages is Lisp. All components are
+atoms or lists. Atom include booleans, integers, strings, variables and
+functions. Lists can contain other lists.
+
+Evaluating atoms, except for variables, returns them. Evaluating variables
+involves environments. Evaluating lists involves function invocations. Some
+function invocations involve special evaluation procedures.
+
+The following functions are always in the environment.  The first four functions
+involve special evaluation procedures:
+
+        noeval
+        if
+        def
+        func
+        macro
+        atom
+        equal
+        first
+        rest
+        append
+        add
+        negate
+        gt
+
+See the source code and other Lisp resources for further details.
