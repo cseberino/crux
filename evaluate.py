@@ -1,7 +1,3 @@
-"""
-evaluator
-"""
-
 import types
 
 def is_int(exp):
@@ -72,7 +68,7 @@ def core_if(args, extra):
 
         result = None
         if len(args) == 3:
-                if evaluate(args[0], extra) not in [False, "", 0, []]:
+                if evaluate(args[0], extra):
                         result = evaluate(args[1], extra)
                 else:
                         result = evaluate(args[2], extra)
@@ -86,8 +82,7 @@ def core_def(args, extra):
 
         result = None
         if (len(args) == 2) and is_var(args[0]):
-                extra[args[0]] = evaluate(args[1], extra)
-                result = True
+                result = extra[args[0]] = evaluate(args[1], extra)
 
         return result
 
@@ -97,8 +92,8 @@ def core_func(args, extra):
         """
 
         result = None
-        if (len(args) >= 2) and (is_var(args[0]) or (is_list(args[0]) and      \
-                                            all(is_var(e) for e in args[0]))):
+        if (len(args) >= 2) and (is_var(args[0]) or                            \
+                      (is_list(args[0]) and all(is_var(e) for e in args[0]))):
                 @handle_args(len(args[0]), is_var(args[0]))
                 def func(args_, extra_):
                         result  = None
@@ -136,8 +131,7 @@ def core_macro(args, extra):
 
                         return result
 
-                extra[args[0]] = macro
-                result         = True
+                result = extra[args[0]] = macro
 
         return result
 
