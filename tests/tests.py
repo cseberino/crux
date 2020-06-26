@@ -20,6 +20,7 @@ sys.path.append("..")
 
 import evaluate
 import unittest
+import warnings
 import subprocess
 import string
 import re
@@ -33,6 +34,10 @@ def create_crux_mod():
         open("../__crux__.py", "w").write("".join(contents[:-3]))
 
 class Tester(unittest.TestCase):
+        def setUp(self):
+                warnings.simplefilter("ignore", ResourceWarning)
+                warnings.simplefilter("ignore", DeprecationWarning)
+
         def test_type_identifiers(self):
                 self.assertTrue( evaluate.is_int(34))
                 self.assertTrue( evaluate.is_int(-34))
@@ -2909,5 +2914,4 @@ None
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
 
-test_suite = unittest.makeSuite(Tester)
-unittest.TextTestRunner(verbosity = 2).run(test_suite)
+unittest.main()
