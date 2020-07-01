@@ -2914,4 +2914,42 @@ None
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
 
+        def test_bit_not(self):
+                program = \
+'''
+(~ 1)
+(~ 2)
+(~ 0)
+(~ -5)
+(~ -2)
+(~ -1)
+(~ -0)
+(~)
+(~ 1 2 3 4 5)
+(~ "hello")
+(~ True)
+(~ ())
+(~ (list 1 2 3))
+'''
+                answer  = \
+b'''\
+-2
+-3
+-1
+4
+1
+0
+-1
+None
+None
+None
+None
+None
+None
+'''
+                open("__program__", "w").write(program)
+                output  = subprocess.check_output(["../crux", "__program__"])
+                self.assertEqual(output, answer)
+                subprocess.call(["rm", "__program__"])
+
 unittest.main()
