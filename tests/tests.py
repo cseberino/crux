@@ -1900,6 +1900,10 @@ b'''\
 (slice (list "a" "b" "c" "d") -3 -1)
 (slice (list "a" "b" "c" "d") -3 -2)
 (slice (list "a" "b" "c" "d") -3  4)
+(slice (list "a" "b" "c" "d")  0 ())
+(slice (list "a" "b" "c" "d")  1 ())
+(slice (list "a" "b" "c" "d")  2 ())
+(slice (list "a" "b" "c" "d")  3 ())
 '''
                 answer  = \
 b'''\
@@ -1928,6 +1932,10 @@ b'''\
 ("b" "c")
 ("b")
 ("b" "c" "d")
+("a" "b" "c" "d")
+("b" "c" "d")
+("c" "d")
+("d")
 '''
                 open("__program__", "w").write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])

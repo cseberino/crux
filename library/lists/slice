@@ -7,7 +7,7 @@
                           (append (slice_ l_ (+ beg_ 1) end_)
                                   (index l_ beg_)))))
            (def beg (if (< beg 0) (+ (len l) beg) beg))
-           (def end (if (< end 0) (+ (len l) end) end))
+           (def end (if (= end ()) (len l) (if (< end 0) (+ (len l) end) end)))
            (if (= l ())
                ()
                (reverse (slice_ l beg end)))))
