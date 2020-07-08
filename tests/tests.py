@@ -2644,6 +2644,7 @@ b'''\
 (% 1 2 3 4)
 (% "hello" 1)
 (% 1 "hello")
+(% -84 10)
 '''
                 answer  = \
 b'''\
@@ -2669,6 +2670,7 @@ None
 None
 None
 None
+6
 '''
                 open("__program__", "w").write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
