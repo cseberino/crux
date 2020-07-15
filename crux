@@ -101,6 +101,5 @@ for d in os.walk(LIB):
         for f in d[2]:
                 for e in parse(open(os.path.join(d[0], f)).read()):
                         evaluate.evaluate(e, env)
-for f in sys.argv[1:]:
-        for e in parse(open(f).read()):
-                print(format_(evaluate.evaluate(e, env)))
+for e in parse(open(sys.argv[1]).read()):
+        print(format_(evaluate.evaluate(e, env)))

@@ -52,12 +52,12 @@ def handle_args(n_args, any_len = False):
         """
 
         def decor(func):
-                def func_(args, extra):
+                def func_(args, env):
                         result = None
                         if any_len or (len(args) == n_args):
-                                args_ = [evaluate(e, extra) for e in args]
+                                args_ = [evaluate(e, env) for e in args]
                                 if None not in args_:
-                                        result = func(args_, extra)
+                                        result = func(args_, env)
 
                         return result
 
@@ -65,7 +65,7 @@ def handle_args(n_args, any_len = False):
 
         return decor
 
-def core_noeval(args, extra):
+def core_noeval(args, env):
         """
         Helps.
         """
@@ -76,34 +76,34 @@ def core_noeval(args, extra):
 
         return result
 
-def core_if(args, extra):
+def core_if(args, env):
         """
         Helps.
         """
 
         result = None
         if len(args) == 3:
-                cond = evaluate(args[0], extra)
+                cond = evaluate(args[0], env)
                 if cond is not None:
                         if cond:
-                                result = evaluate(args[1], extra)
+                                result = evaluate(args[1], env)
                         else:
-                                result = evaluate(args[2], extra)
+                                result = evaluate(args[2], env)
 
         return result
 
-def core_def(args, extra):
+def core_def(args, env):
         """
         Helps.
         """
 
         result = None
         if (len(args) == 2) and is_var(args[0]):
-                result = extra[args[0]] = evaluate(args[1], extra)
+                result = env[args[0]] = evaluate(args[1], env)
 
         return result
 
-def core_func(args, extra):
+def core_func(args, env):
         """
         Helps.
         """
@@ -112,14 +112,14 @@ def core_func(args, extra):
         if (len(args) >= 2) and (is_var(args[0]) or                            \
                       (is_list(args[0]) and all(is_var(e) for e in args[0]))):
                 @handle_args(len(args[0]), is_var(args[0]))
-                def func(args_, extra_):
-                        result  = None
-                        params  = args[0]
+                def func(args_, env_):
+                        result = None
+                        params = args[0]
                         if is_var(params):
                                 params, args_ = [params], [args_]
-                        extra__ = {**extra, **dict(zip(params, args_))}
+                        env__  = {**env, **dict(zip(params, args_))}
                         for e in args[1:]:
-                                result = evaluate(e, extra__)
+                                result = evaluate(e, env__)
 
                         return result
 
@@ -127,7 +127,7 @@ def core_func(args, extra):
 
         return result
 
-def core_macro(args, extra):
+def core_macro(args, env):
         """
         Helps.
         """
@@ -135,25 +135,25 @@ def core_macro(args, extra):
         result = None
         if (len(args) >= 3) and is_var(args[0]) and (is_var(args[1]) or        \
                       (is_list(args[1]) and all(is_var(e) for e in args[1]))):
-                def macro(args_, extra_):
+                def macro(args_, env_):
                         result = None
                         params = args[1]
                         if is_var(params) or (len(params) == len(args_)):
                                 if is_var(params):
                                         params, args_ = [params], [args_]
-                                extra__ = {**extra, **dict(zip(params, args_))}
+                                env__ = {**env, **dict(zip(params, args_))}
                                 for e in args[2:]:
-                                        code   = evaluate(e,    extra__)
-                                        result = evaluate(code, extra_)
+                                        code   = evaluate(e,    env__)
+                                        result = evaluate(code, env_)
 
                         return result
 
-                result = extra[args[0]] = macro
+                result = env[args[0]] = macro
 
         return result
 
 @handle_args(1)
-def core_atom(args, extra):
+def core_atom(args, env):
         """
         Helps.
         """
@@ -161,7 +161,7 @@ def core_atom(args, extra):
         return is_atom(args[0])
 
 @handle_args(2)
-def core_equal(args, extra):
+def core_equal(args, env):
         """
         Helps.
         """
@@ -169,7 +169,7 @@ def core_equal(args, extra):
         return args[0] == args[1]
 
 @handle_args(1)
-def core_first(args, extra):
+def core_first(args, env):
         """
         Helps.
         """
@@ -181,7 +181,7 @@ def core_first(args, extra):
         return result
 
 @handle_args(1)
-def core_rest(args, extra):
+def core_rest(args, env):
         """
         Helps.
         """
@@ -193,7 +193,7 @@ def core_rest(args, extra):
         return result
 
 @handle_args(2)
-def core_append(args, extra):
+def core_append(args, env):
         """
         Helps.
         """
@@ -205,7 +205,7 @@ def core_append(args, extra):
         return result
 
 @handle_args(2)
-def core_add(args, extra):
+def core_add(args, env):
         """
         Helps.
         """
@@ -217,7 +217,7 @@ def core_add(args, extra):
         return result
 
 @handle_args(1)
-def core_negate(args, extra):
+def core_negate(args, env):
         """
         Helps.
         """
@@ -229,7 +229,7 @@ def core_negate(args, extra):
         return result
 
 @handle_args(2)
-def core_gt(args, extra):
+def core_gt(args, env):
         """
         Helps.
         """
@@ -240,7 +240,7 @@ def core_gt(args, extra):
 
         return result
 
-def evaluate(exp, extra):
+def evaluate(exp, env):
         """
         Evaluates.
         """
@@ -248,18 +248,18 @@ def evaluate(exp, extra):
         result = None
         if   is_atom(exp):
                 if is_var(exp):
-                        if   exp in extra:
-                                if is_atom(extra[exp]) or is_list(extra[exp]):
-                                        result = extra[exp]
+                        if   exp in env:
+                                if is_atom(env[exp]) or is_list(env[exp]):
+                                        result = env[exp]
                         elif ("core_" + exp[0]) in globals():
                                 result = globals()["core_" + exp[0]]
                 else:
                         result = exp
         elif is_list(exp):
                 if exp:
-                        func = evaluate(exp[0], extra)
+                        func = evaluate(exp[0], env)
                         if isinstance(func, types.FunctionType):
-                                result = func(exp[1:], extra)
+                                result = func(exp[1:], env)
                 else:
                         result = []
 

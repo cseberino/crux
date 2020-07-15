@@ -31,7 +31,7 @@ FUNC += "at 0x[0-9a-f]*>"
 def create_crux_mod():
         subprocess.call(["cp", "../crux", "../__crux__.py"])
         contents = open("../__crux__.py").readlines()
-        open("../__crux__.py", "w").write("".join(contents[:-3]))
+        open("../__crux__.py", "w").write("".join(contents[:-2]))
 
 class Tester(unittest.TestCase):
         def setUp(self):
@@ -1403,18 +1403,6 @@ True
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
-
-        def test_multiple_files(self):
-                num      = 99
-                files    = ["__program__{}".format(i) for i in range(num)]
-                programs = ["(add 10 {})".format(i)   for i in range(num)]
-                for i in range(num):
-                        open(files[i], "w").write(programs[i])
-                answer   = "".join(["{}\n".format(i + 10) for i in range(num)])
-                answer   = answer.encode()
-                output   = subprocess.check_output(["../crux"] + files)
-                self.assertEqual(output, answer)
-                subprocess.call(["rm"] + files)
 
         def test_basic_math(self):
                 program = \
