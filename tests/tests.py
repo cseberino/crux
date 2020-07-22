@@ -25,7 +25,7 @@ import subprocess
 import string
 import re
 
-FUNC  = "<function (core_{}|handle_args\.<locals>\.decor\.<locals>\.func_) "
+FUNC  = "<function (core_{}|eval_args\.<locals>\.decor\.<locals>\.func_) "
 FUNC += "at 0x[0-9a-f]*>"
 
 def create_crux_mod():
@@ -208,9 +208,9 @@ class Tester(unittest.TestCase):
                 answer = 678
                 self.assertEqual(output, answer)
 
-        def test_handle_args(self):
-                handle_args_ = evaluate.handle_args(3)
-                func_        = handle_args_(lambda args, extra : 999)
+        def test_eval_args(self):
+                eval_args_ = evaluate.eval_args(3)
+                func_      = eval_args_(lambda args, extra : 999)
 
                 output = func_([1, 2], {})
                 answer = None
