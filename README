@@ -2,13 +2,13 @@ Crux
 
 a minimal Lisp variant
 
-One of the simplest practical programming languages is Lisp. All components are
-atoms or lists. Atom include booleans, integers, strings, variables and
-functions. Lists can contain other lists.
+One of the simplest practical programming languages is Lisp.  All components are
+atoms or lists.  Atoms include booleans, integers, strings, variables and
+functions.  Lists can contain other lists.
 
-Evaluating atoms, except for variables, returns them. Evaluating variables
-involves environments. Evaluating lists involves function invocations. Some
-function invocations involve special evaluation procedures.
+Running programs implies evaluating atoms and lists.  Evaluating atoms, except
+for variables, returns them.  Evaluating variables involves environments.
+Evaluating lists involves function invocations.
 
 The following functions are always in the environment.  The first four functions
 involve special evaluation procedures:
