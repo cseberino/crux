@@ -65,7 +65,7 @@ def regular(n_args, any_len = False):
 
         return decor
 
-def core_noeval(args, env):
+def eval_noeval(args, env):
         """
         Helps.
         """
@@ -76,7 +76,7 @@ def core_noeval(args, env):
 
         return result
 
-def core_if(args, env):
+def eval_if(args, env):
         """
         Helps.
         """
@@ -92,7 +92,7 @@ def core_if(args, env):
 
         return result
 
-def core_def(args, env):
+def eval_def(args, env):
         """
         Helps.
         """
@@ -103,7 +103,7 @@ def core_def(args, env):
 
         return result
 
-def core_func(args, env):
+def eval_func(args, env):
         """
         Helps.
         """
@@ -127,7 +127,7 @@ def core_func(args, env):
 
         return result
 
-def core_macro(args, env):
+def eval_macro(args, env):
         """
         Helps.
         """
@@ -153,7 +153,7 @@ def core_macro(args, env):
         return result
 
 @regular(1)
-def core_atom(args, env):
+def eval_atom(args, env):
         """
         Helps.
         """
@@ -161,7 +161,7 @@ def core_atom(args, env):
         return is_atom(args[0])
 
 @regular(2)
-def core_equal(args, env):
+def eval_equal(args, env):
         """
         Helps.
         """
@@ -169,7 +169,7 @@ def core_equal(args, env):
         return args[0] == args[1]
 
 @regular(1)
-def core_first(args, env):
+def eval_first(args, env):
         """
         Helps.
         """
@@ -181,7 +181,7 @@ def core_first(args, env):
         return result
 
 @regular(1)
-def core_rest(args, env):
+def eval_rest(args, env):
         """
         Helps.
         """
@@ -193,7 +193,7 @@ def core_rest(args, env):
         return result
 
 @regular(2)
-def core_append(args, env):
+def eval_append(args, env):
         """
         Helps.
         """
@@ -205,7 +205,7 @@ def core_append(args, env):
         return result
 
 @regular(2)
-def core_add(args, env):
+def eval_add(args, env):
         """
         Helps.
         """
@@ -217,7 +217,7 @@ def core_add(args, env):
         return result
 
 @regular(1)
-def core_negate(args, env):
+def eval_negate(args, env):
         """
         Helps.
         """
@@ -229,7 +229,7 @@ def core_negate(args, env):
         return result
 
 @regular(2)
-def core_gt(args, env):
+def eval_gt(args, env):
         """
         Helps.
         """
@@ -251,8 +251,8 @@ def evaluate(exp, env):
                         if   exp in env:
                                 if is_atom(env[exp]) or is_list(env[exp]):
                                         result = env[exp]
-                        elif ("core_" + exp[0]) in globals():
-                                result = globals()["core_" + exp[0]]
+                        elif ("eval_" + exp[0]) in globals():
+                                result = globals()["eval_" + exp[0]]
                 else:
                         result = exp
         elif is_list(exp):

@@ -25,7 +25,7 @@ import subprocess
 import string
 import re
 
-FUNC  = "<function (core_{}|regular\.<locals>\.decor\.<locals>\.func_) "
+FUNC  = "<function (eval_{}|regular\.<locals>\.decor\.<locals>\.func_) "
 FUNC += "at 0x[0-9a-f]*>"
 
 def create_crux_mod():
@@ -85,8 +85,8 @@ class Tester(unittest.TestCase):
                 self.assertTrue( evaluate.is_atom(53))
                 self.assertTrue( evaluate.is_atom(-53))
                 self.assertTrue( evaluate.is_atom("abc"))
-                self.assertTrue( evaluate.is_atom(evaluate.core_noeval))
-                self.assertTrue( evaluate.is_atom(evaluate.core_if))
+                self.assertTrue( evaluate.is_atom(evaluate.eval_noeval))
+                self.assertTrue( evaluate.is_atom(evaluate.eval_if))
                 self.assertTrue( evaluate.is_atom(("abc",)))
                 self.assertTrue( evaluate.is_atom(("a3",)))
                 self.assertTrue( evaluate.is_atom(("@^@^@%*",)))
@@ -135,76 +135,76 @@ class Tester(unittest.TestCase):
                 self.assertFalse(evaluate.is_list([None]))
 
         def test_noeval(self):
-                output = evaluate.core_noeval([True], {})
+                output = evaluate.eval_noeval([True], {})
                 answer = True
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_noeval([4], {})
+                output = evaluate.eval_noeval([4], {})
                 answer = 4
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_noeval([-234], {})
+                output = evaluate.eval_noeval([-234], {})
                 answer = -234
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_noeval([True], {})
+                output = evaluate.eval_noeval([True], {})
                 answer = True
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_noeval(["abc"], {})
+                output = evaluate.eval_noeval(["abc"], {})
                 answer = "abc"
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_noeval([[True, 4, "abc"]], {})
+                output = evaluate.eval_noeval([[True, 4, "abc"]], {})
                 answer = [True, 4, "abc"]
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_noeval([True, 4], {})
+                output = evaluate.eval_noeval([True, 4], {})
                 answer = None
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_noeval([True, 4, "abc"], {})
+                output = evaluate.eval_noeval([True, 4, "abc"], {})
                 answer = None
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_noeval([True, []], {})
+                output = evaluate.eval_noeval([True, []], {})
                 answer = None
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_noeval([], {})
+                output = evaluate.eval_noeval([], {})
                 answer = None
                 self.assertEqual(output, answer)
 
         def test_if(self):
-                output = evaluate.core_if([True, 345, 678], {})
+                output = evaluate.eval_if([True, 345, 678], {})
                 answer = 345
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_if([98, 345, 678], {})
+                output = evaluate.eval_if([98, 345, 678], {})
                 answer = 345
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_if(["abc", 345, 678], {})
+                output = evaluate.eval_if(["abc", 345, 678], {})
                 answer = 345
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_if([False, 345, 678], {})
+                output = evaluate.eval_if([False, 345, 678], {})
                 answer = 678
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_if([0, 345, 678], {})
+                output = evaluate.eval_if([0, 345, 678], {})
                 answer = 678
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_if(["", 345, 678], {})
+                output = evaluate.eval_if(["", 345, 678], {})
                 answer = 678
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_if([[], 345, 678], {})
+                output = evaluate.eval_if([[], 345, 678], {})
                 answer = 678
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_if([0, 345, 678], {})
+                output = evaluate.eval_if([0, 345, 678], {})
                 answer = 678
                 self.assertEqual(output, answer)
 
@@ -224,400 +224,400 @@ class Tester(unittest.TestCase):
                 self.assertEqual(output, answer)
 
         def test_atom(self):
-                output = evaluate.core_atom([False], {})
+                output = evaluate.eval_atom([False], {})
                 answer = True
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_atom([True], {})
+                output = evaluate.eval_atom([True], {})
                 answer = True
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_atom([63], {})
+                output = evaluate.eval_atom([63], {})
                 answer = True
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_atom([-63], {})
+                output = evaluate.eval_atom([-63], {})
                 answer = True
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_atom(["abc"], {})
+                output = evaluate.eval_atom(["abc"], {})
                 answer = True
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_atom([""], {})
+                output = evaluate.eval_atom([""], {})
                 answer = True
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_atom([evaluate.core_noeval], {})
+                output = evaluate.eval_atom([evaluate.eval_noeval], {})
                 answer = True
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_atom([[]], {})
+                output = evaluate.eval_atom([[]], {})
                 answer = False
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_atom([[("noeval",), 4]], {})
+                output = evaluate.eval_atom([[("noeval",), 4]], {})
                 answer = True
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_atom([[("noeval",), [3]]], {})
+                output = evaluate.eval_atom([[("noeval",), [3]]], {})
                 answer = False
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_atom([4, 5], {})
+                output = evaluate.eval_atom([4, 5], {})
                 answer = None
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_atom([2.7], {})
+                output = evaluate.eval_atom([2.7], {})
                 answer = None
                 self.assertEqual(output, answer)
 
         def test_equal(self):
-                output = evaluate.core_equal([True, True], {})
+                output = evaluate.eval_equal([True, True], {})
                 answer = True
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_equal([False, False], {})
+                output = evaluate.eval_equal([False, False], {})
                 answer = True
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_equal([34, 34], {})
+                output = evaluate.eval_equal([34, 34], {})
                 answer = True
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_equal([-92, -92], {})
+                output = evaluate.eval_equal([-92, -92], {})
                 answer = True
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_equal(["abc", "abc"], {})
+                output = evaluate.eval_equal(["abc", "abc"], {})
                 answer = True
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_equal([True, False], {})
+                output = evaluate.eval_equal([True, False], {})
                 answer = False
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_equal([1, 2], {})
+                output = evaluate.eval_equal([1, 2], {})
                 answer = False
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_equal([-6, -9], {})
+                output = evaluate.eval_equal([-6, -9], {})
                 answer = False
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_equal(["abc", "abd"], {})
+                output = evaluate.eval_equal(["abc", "abd"], {})
                 answer = False
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_equal([[], []], {})
+                output = evaluate.eval_equal([[], []], {})
                 answer = True
                 self.assertEqual(output, answer)
 
                 e = [("noeval",), [3, 4]]
                 f = [("noeval",), [3, 5]]
 
-                output = evaluate.core_equal([e, e], {})
+                output = evaluate.eval_equal([e, e], {})
                 answer = True
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_equal([e, e, e], {})
+                output = evaluate.eval_equal([e, e, e], {})
                 answer = None
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_equal([e, f], {})
+                output = evaluate.eval_equal([e, f], {})
                 answer = False
                 self.assertEqual(output, answer)
 
         def test_first(self):
                 l      = [("noeval",), [3, 5]]
-                output = evaluate.core_first([l], {})
+                output = evaluate.eval_first([l], {})
                 answer = 3
                 self.assertEqual(output, answer)
 
                 l      = [("noeval",), True]
-                output = evaluate.core_first([l], {})
+                output = evaluate.eval_first([l], {})
                 answer = None
                 self.assertEqual(output, answer)
 
                 l      = [("noeval",), False]
-                output = evaluate.core_first([l], {})
+                output = evaluate.eval_first([l], {})
                 answer = None
                 self.assertEqual(output, answer)
 
                 l      = [("noeval",), 57]
-                output = evaluate.core_first([l], {})
+                output = evaluate.eval_first([l], {})
                 answer = None
                 self.assertEqual(output, answer)
 
                 l      = [("noeval",), -57]
-                output = evaluate.core_first([l], {})
+                output = evaluate.eval_first([l], {})
                 answer = None
                 self.assertEqual(output, answer)
 
                 l      = [("noeval",), "abc"]
-                output = evaluate.core_first([l], {})
+                output = evaluate.eval_first([l], {})
                 answer = None
                 self.assertEqual(output, answer)
 
                 l      = [("noeval",), [[], 5]]
-                output = evaluate.core_first([l], {})
+                output = evaluate.eval_first([l], {})
                 answer = []
                 self.assertEqual(output, answer)
 
                 l      = [("noeval",), [[False, "abc"], True]]
-                output = evaluate.core_first([l], {})
+                output = evaluate.eval_first([l], {})
                 answer = [False, "abc"]
                 self.assertEqual(output, answer)
 
                 l      = [("noeval",), [[False, "abc"], [6, "abc", False]]]
-                output = evaluate.core_first([l], {})
+                output = evaluate.eval_first([l], {})
                 answer = [False, "abc"]
                 self.assertEqual(output, answer)
 
                 l      = []
-                output = evaluate.core_first([l], {})
+                output = evaluate.eval_first([l], {})
                 answer = []
                 self.assertEqual(output, answer)
 
         def test_rest(self):
                 l      = [("noeval",), [3, 5]]
-                output = evaluate.core_rest([l], {})
+                output = evaluate.eval_rest([l], {})
                 answer = [5]
                 self.assertEqual(output, answer)
 
                 l      = [("noeval",), True]
-                output = evaluate.core_rest([l], {})
+                output = evaluate.eval_rest([l], {})
                 answer = None
                 self.assertEqual(output, answer)
 
                 l      = [("noeval",), False]
-                output = evaluate.core_rest([l], {})
+                output = evaluate.eval_rest([l], {})
                 answer = None
                 self.assertEqual(output, answer)
 
                 l      = [("noeval",), 57]
-                output = evaluate.core_rest([l], {})
+                output = evaluate.eval_rest([l], {})
                 answer = None
                 self.assertEqual(output, answer)
 
                 l      = [("noeval",), -57]
-                output = evaluate.core_rest([l], {})
+                output = evaluate.eval_rest([l], {})
                 answer = None
                 self.assertEqual(output, answer)
 
                 l      = [("noeval",), "abc"]
-                output = evaluate.core_rest([l], {})
+                output = evaluate.eval_rest([l], {})
                 answer = None
                 self.assertEqual(output, answer)
 
                 l      = [("noeval",), [[], 5]]
-                output = evaluate.core_rest([l], {})
+                output = evaluate.eval_rest([l], {})
                 answer = [5]
                 self.assertEqual(output, answer)
 
                 l      = [("noeval",), [[False, "abc"], True]]
-                output = evaluate.core_rest([l], {})
+                output = evaluate.eval_rest([l], {})
                 answer = [True]
                 self.assertEqual(output, answer)
 
                 l      = [("noeval",), [[False, "abc"], [6, "abc", False]]]
-                output = evaluate.core_rest([l], {})
+                output = evaluate.eval_rest([l], {})
                 answer = [[6, "abc", False]]
                 self.assertEqual(output, answer)
 
                 l      = []
-                output = evaluate.core_rest([l], {})
+                output = evaluate.eval_rest([l], {})
                 answer = []
                 self.assertEqual(output, answer)
 
         def test_append(self):
                 l      = []
-                output = evaluate.core_append([l, 3], {})
+                output = evaluate.eval_append([l, 3], {})
                 answer = [3]
                 self.assertEqual(output, answer)
 
                 l      = [("noeval",), [True, -4]]
-                output = evaluate.core_append([l, False], {})
+                output = evaluate.eval_append([l, False], {})
                 answer = [True, -4, False]
                 self.assertEqual(output, answer)
 
                 l      = [("noeval",), ["abc", []]]
-                output = evaluate.core_append([l, l], {})
+                output = evaluate.eval_append([l, l], {})
                 answer = ["abc", [], ["abc", []]]
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_append([4, 3], {})
+                output = evaluate.eval_append([4, 3], {})
                 answer = None
                 self.assertEqual(output, answer)
 
                 l      = [("noeval",), ["abc", []]]
-                output = evaluate.core_append([l, 3, 4], {})
+                output = evaluate.eval_append([l, 3, 4], {})
                 answer = None
                 self.assertEqual(output, answer)
 
         def test_add(self):
-                output = evaluate.core_add([3, 4], {})
+                output = evaluate.eval_add([3, 4], {})
                 answer = 7
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_add([-3, -4], {})
+                output = evaluate.eval_add([-3, -4], {})
                 answer = -7
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_add([-3, 4], {})
+                output = evaluate.eval_add([-3, 4], {})
                 answer = 1
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_add([3, -4], {})
+                output = evaluate.eval_add([3, -4], {})
                 answer = -1
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_add([3, 4, 16], {})
+                output = evaluate.eval_add([3, 4, 16], {})
                 answer = None
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_add([3, True], {})
+                output = evaluate.eval_add([3, True], {})
                 answer = None
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_add(["abc", 4], {})
+                output = evaluate.eval_add(["abc", 4], {})
                 answer = None
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_add([3, []], {})
+                output = evaluate.eval_add([3, []], {})
                 answer = None
                 self.assertEqual(output, answer)
 
         def test_negate(self):
-                output = evaluate.core_negate([3], {})
+                output = evaluate.eval_negate([3], {})
                 answer = -3
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_negate([-4], {})
+                output = evaluate.eval_negate([-4], {})
                 answer = 4
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_negate([0], {})
+                output = evaluate.eval_negate([0], {})
                 answer = 0
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_negate([1], {})
+                output = evaluate.eval_negate([1], {})
                 answer = -1
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_negate([-1], {})
+                output = evaluate.eval_negate([-1], {})
                 answer = 1
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_negate([3, 4], {})
+                output = evaluate.eval_negate([3, 4], {})
                 answer = None
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_negate([True], {})
+                output = evaluate.eval_negate([True], {})
                 answer = None
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_negate([False], {})
+                output = evaluate.eval_negate([False], {})
                 answer = None
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_negate(["abc"], {})
+                output = evaluate.eval_negate(["abc"], {})
                 answer = None
                 self.assertEqual(output, answer)
 
         def test_gt(self):
-                output = evaluate.core_gt([5, 4], {})
+                output = evaluate.eval_gt([5, 4], {})
                 answer = True
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_gt([3, 4], {})
+                output = evaluate.eval_gt([3, 4], {})
                 answer = False
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_gt([-3, -4], {})
+                output = evaluate.eval_gt([-3, -4], {})
                 answer = True
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_gt([-24, -4], {})
+                output = evaluate.eval_gt([-24, -4], {})
                 answer = False
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_gt([-24, 4], {})
+                output = evaluate.eval_gt([-24, 4], {})
                 answer = False
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_gt([24, -4], {})
+                output = evaluate.eval_gt([24, -4], {})
                 answer = True
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_gt([3, 4, 16], {})
+                output = evaluate.eval_gt([3, 4, 16], {})
                 answer = None
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_gt([3, True], {})
+                output = evaluate.eval_gt([3, True], {})
                 answer = None
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_gt(["abc", 4], {})
+                output = evaluate.eval_gt(["abc", 4], {})
                 answer = None
                 self.assertEqual(output, answer)
 
-                output = evaluate.core_gt([3, []], {})
+                output = evaluate.eval_gt([3, []], {})
                 answer = None
                 self.assertEqual(output, answer)
 
         def test_def(self):
                 extra  = {}
-                output = evaluate.core_def([("x",), True], extra)
+                output = evaluate.eval_def([("x",), True], extra)
                 answer = True
                 self.assertEqual(output, answer)
                 self.assertEqual(extra["x",], True)
 
                 extra  = {}
-                output = evaluate.core_def([("abc",), 4], extra)
+                output = evaluate.eval_def([("abc",), 4], extra)
                 answer = 4
                 self.assertEqual(output, answer)
                 self.assertEqual(extra["abc",], 4)
 
                 extra  = {}
-                output = evaluate.core_def([("&^%",), -62], extra)
+                output = evaluate.eval_def([("&^%",), -62], extra)
                 answer = -62
                 self.assertEqual(output, answer)
                 self.assertEqual(extra["&^%",], -62)
 
                 extra  = {}
                 l      = [("noeval",), [2, 4]]
-                output = evaluate.core_def([("k9;",), l], extra)
+                output = evaluate.eval_def([("k9;",), l], extra)
                 answer = l[1]
                 self.assertEqual(output, answer)
                 self.assertEqual(extra["k9;",], [2, 4])
 
                 extra  = {}
                 l      = [("noeval",), [2, True, []]]
-                output = evaluate.core_def([("x",), l], extra)
+                output = evaluate.eval_def([("x",), l], extra)
                 answer = l[1]
                 self.assertEqual(output, answer)
                 self.assertEqual(extra["x",], [2, True, []])
 
                 extra  = {}
-                output = evaluate.core_def([("x",), []], extra)
+                output = evaluate.eval_def([("x",), []], extra)
                 answer = []
                 self.assertEqual(output, answer)
                 self.assertEqual(extra["x",], [])
 
                 extra  = {}
-                output = evaluate.core_def([("[n9",), 3, 2], extra)
+                output = evaluate.eval_def([("[n9",), 3, 2], extra)
                 answer = None
                 self.assertEqual(output, answer)
                 self.assertTrue(("[n9",) not in extra)
 
         def test_func(self):
-                uf     = evaluate.core_func([[("a",)], 3], {})
+                uf     = evaluate.eval_func([[("a",)], 3], {})
                 output = uf([45], {})
                 answer = 3
                 self.assertEqual(output, answer)
 
-                uf     = evaluate.core_func([[("b",)], ("b",)], {})
+                uf     = evaluate.eval_func([[("b",)], ("b",)], {})
                 output = uf([56], {})
                 answer = 56
                 self.assertEqual(output, answer)
@@ -626,7 +626,7 @@ class Tester(unittest.TestCase):
                 body   = [("equal",), ("c",), ("d",)]
                 args   = [4, 4]
                 answer = True
-                uf     = evaluate.core_func([params, body], {})
+                uf     = evaluate.eval_func([params, body], {})
                 output = uf(args, {})
                 self.assertEqual(output, answer)
 
@@ -634,7 +634,7 @@ class Tester(unittest.TestCase):
                 body   = [("equal",), ("e",), ("f",)]
                 args   = [4, 8]
                 answer = False
-                uf     = evaluate.core_func([params, body], {})
+                uf     = evaluate.eval_func([params, body], {})
                 output = uf(args, {})
                 self.assertEqual(output, answer)
 
@@ -643,7 +643,7 @@ class Tester(unittest.TestCase):
                           [("append",), [("append",), [], ("g",)], ("h",)]]
                 args   = [5, 6]
                 answer = 5
-                uf     = evaluate.core_func([params, body], {})
+                uf     = evaluate.eval_func([params, body], {})
                 output = uf(args, {})
                 self.assertEqual(output, answer)
 
@@ -652,7 +652,7 @@ class Tester(unittest.TestCase):
                           [("append",), [("append",), [], ("i",)], ("j",)]]
                 args   = [5, 6]
                 answer = [6]
-                uf     = evaluate.core_func([params, body], {})
+                uf     = evaluate.eval_func([params, body], {})
                 output = uf(args, {})
                 self.assertEqual(output, answer)
 
@@ -660,7 +660,7 @@ class Tester(unittest.TestCase):
                 body   = [("add",), ("k",), ("l",)]
                 args   = [-62, 100]
                 answer = 38
-                uf     = evaluate.core_func([params, body], {})
+                uf     = evaluate.eval_func([params, body], {})
                 output = uf(args, {})
                 self.assertEqual(output, answer)
 
@@ -668,7 +668,7 @@ class Tester(unittest.TestCase):
                 body   = 2
                 args   = [4, 8]
                 answer = None
-                uf     = evaluate.core_func([params, body], {})
+                uf     = evaluate.eval_func([params, body], {})
                 output = uf
                 self.assertEqual(output, answer)
 
@@ -676,7 +676,7 @@ class Tester(unittest.TestCase):
                 body   = 2
                 args   = [9, 1]
                 answer = None
-                uf     = evaluate.core_func([params, body], {})
+                uf     = evaluate.eval_func([params, body], {})
                 output = uf(args, {})
                 self.assertEqual(output, answer)
 
@@ -702,11 +702,11 @@ class Tester(unittest.TestCase):
                 self.assertEqual(output, answer)
 
                 output = evaluate.evaluate(("noeval",), {})
-                answer = evaluate.core_noeval
+                answer = evaluate.eval_noeval
                 self.assertEqual(output, answer)
 
-                output = evaluate.evaluate(evaluate.core_negate, {})
-                answer = evaluate.core_negate
+                output = evaluate.evaluate(evaluate.eval_negate, {})
+                answer = evaluate.eval_negate
                 self.assertEqual(output, answer)
 
                 output = evaluate.evaluate(("xv3",), {("xv3",) : -773})
