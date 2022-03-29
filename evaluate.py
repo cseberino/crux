@@ -46,7 +46,7 @@ def is_list(exp):
         return isinstance(exp, list) and                                       \
                                     all(is_atom(e) or is_list(e) for e in exp)
 
-def eval_args(n_args, any_len = False):
+def regular(n_args, any_len = False):
         """
         Decorates.
         """
@@ -111,7 +111,7 @@ def core_func(args, env):
         result = None
         if (len(args) >= 2) and (is_var(args[0]) or                            \
                       (is_list(args[0]) and all(is_var(e) for e in args[0]))):
-                @eval_args(len(args[0]), is_var(args[0]))
+                @regular(len(args[0]), is_var(args[0]))
                 def func(args_, env_):
                         result = None
                         params = args[0]
@@ -152,7 +152,7 @@ def core_macro(args, env):
 
         return result
 
-@eval_args(1)
+@regular(1)
 def core_atom(args, env):
         """
         Helps.
@@ -160,7 +160,7 @@ def core_atom(args, env):
 
         return is_atom(args[0])
 
-@eval_args(2)
+@regular(2)
 def core_equal(args, env):
         """
         Helps.
@@ -168,7 +168,7 @@ def core_equal(args, env):
 
         return args[0] == args[1]
 
-@eval_args(1)
+@regular(1)
 def core_first(args, env):
         """
         Helps.
@@ -180,7 +180,7 @@ def core_first(args, env):
 
         return result
 
-@eval_args(1)
+@regular(1)
 def core_rest(args, env):
         """
         Helps.
@@ -192,7 +192,7 @@ def core_rest(args, env):
 
         return result
 
-@eval_args(2)
+@regular(2)
 def core_append(args, env):
         """
         Helps.
@@ -204,7 +204,7 @@ def core_append(args, env):
 
         return result
 
-@eval_args(2)
+@regular(2)
 def core_add(args, env):
         """
         Helps.
@@ -216,7 +216,7 @@ def core_add(args, env):
 
         return result
 
-@eval_args(1)
+@regular(1)
 def core_negate(args, env):
         """
         Helps.
@@ -228,7 +228,7 @@ def core_negate(args, env):
 
         return result
 
-@eval_args(2)
+@regular(2)
 def core_gt(args, env):
         """
         Helps.

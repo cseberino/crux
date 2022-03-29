@@ -25,7 +25,7 @@ import subprocess
 import string
 import re
 
-FUNC  = "<function (core_{}|eval_args\.<locals>\.decor\.<locals>\.func_) "
+FUNC  = "<function (core_{}|regular\.<locals>\.decor\.<locals>\.func_) "
 FUNC += "at 0x[0-9a-f]*>"
 
 def create_crux_mod():
@@ -208,9 +208,8 @@ class Tester(unittest.TestCase):
                 answer = 678
                 self.assertEqual(output, answer)
 
-        def test_eval_args(self):
-                eval_args_ = evaluate.eval_args(3)
-                func_      = eval_args_(lambda args, extra : 999)
+        def test_regular(self):
+                func_  = evaluate.regular(3)(lambda args, extra : 999)
 
                 output = func_([1, 2], {})
                 answer = None
@@ -1299,17 +1298,17 @@ b'''\
 
                 program = \
 '''
-# Macros are code generating codes.
+# Macros are code generation codes.
 # Macros can receive arguments to make the code generation more flexible.
-# Macros receive any arguments unevaluated unlike regular functions.
-# Can make functions with invocations involving special evaluation procedures.
+# Macros receive arguments unevaluated unlike regular functions.
+# Macros can create special (irregular) functions.
 
-# Leads to "(if <argument 1> True <argument 2>)".
-# Defining the macro as "(noeval (if a True b))" avoids inserting the arguments!
+# The following macro leads to "(noeval (if a True b))" and a special function!
 (macro true-or-second (a b) (append (append (append (noeval (if)) a) True) b))
 
 # Gets replaced with "(if (add 1 5) True (negate 6))".
 (true-or-second (add 1 5)  (negate 6))
+
 (true-or-second (add 1 -1) (negate 6))
 (true-or-second (negate 6) (add 1 -1))
 (true-or-second (add 1 -1) (add 1 -1))
