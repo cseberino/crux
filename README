@@ -13,7 +13,7 @@ Evaluating lists involves function invocations.
 The following functions are always in the environment.  The first four functions
 involve special evaluation procedures:
 
-        noeval
+        no_eval
         if
         def
         func

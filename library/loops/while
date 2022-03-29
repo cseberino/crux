@@ -1,6 +1,5 @@
 (macro while args
        (if (>= (len args) 1)
-           (append (append (append (noeval (if)) (first args)) (append (extend
-           (noeval (block)) (rest args)) (extend (append (noeval (while)) (first
-           args)) (rest args)))) True)
-           (noeval)))
+           (append (append (append (no_eval (if)) (first args)) (append (extend
+           (no_eval (block)) (rest args)) (extend (append (no_eval (while))
+           (first args)) (rest args)))) True) (no_eval)))

@@ -1,8 +1,8 @@
 (macro for args
        (if (and (>= (len args) 2) (atom (first args)))
-           (append (append (append (noeval (if)) (append (append (noeval (=))
-           (second args)) ())) True) (append (extend (append (noeval (block))
-           (list (noeval def) (first args) (append (noeval (first)) (second
-           args)))) (rest (rest args))) (extend (list (noeval for) (first args)
-           (append (noeval (rest)) (second args))) (rest (rest args)))))
-           (noeval)))
+           (append (append (append (no_eval (if)) (append (append (no_eval (=))
+           (second args)) ())) True) (append (extend (append (no_eval (block))
+           (list (no_eval def) (first args) (append (no_eval (first)) (second
+           args)))) (rest (rest args))) (extend (list (no_eval for) (first args)
+           (append (no_eval (rest)) (second args))) (rest (rest args)))))
+           (no_eval)))
