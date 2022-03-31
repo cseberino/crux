@@ -1303,7 +1303,7 @@ b'''\
 # Macros receive arguments unevaluated unlike regular functions.
 # Macros can create special (irregular) functions.
 
-# The following macro leads to "(no_eval (if a True b))" and a special function!
+# The following macro leads to "(if a True b)".
 (macro true-or-second (a b) (append (append (append (no_eval (if)) a) True) b))
 
 # Gets replaced with "(if (add 1 5) True (negate 6))".
