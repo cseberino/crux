@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import evaluate
+import eval
 import re
 import os
 import sys
@@ -100,6 +100,6 @@ env = {}
 for d in os.walk(LIB):
         for f in d[2]:
                 for e in parse(open(os.path.join(d[0], f)).read()):
-                        evaluate.evaluate(e, env)
+                        eval.eval(e, env)
 for e in parse(open(sys.argv[1]).read()):
-        print(format_(evaluate.evaluate(e, env)))
+        print(format_(eval.eval(e, env)))

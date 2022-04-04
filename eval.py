@@ -55,7 +55,7 @@ def regular(n_args, any_len = False):
                 def func_(args, env):
                         result = None
                         if any_len or (len(args) == n_args):
-                                args_ = [evaluate(e, env) for e in args]
+                                args_ = [eval(e, env) for e in args]
                                 if None not in args_:
                                         result = func(args_, env)
 
@@ -83,12 +83,12 @@ def eval_if(args, env):
 
         result = None
         if len(args) == 3:
-                cond = evaluate(args[0], env)
+                cond = eval(args[0], env)
                 if cond is not None:
                         if cond:
-                                result = evaluate(args[1], env)
+                                result = eval(args[1], env)
                         else:
-                                result = evaluate(args[2], env)
+                                result = eval(args[2], env)
 
         return result
 
@@ -99,7 +99,7 @@ def eval_def(args, env):
 
         result = None
         if (len(args) == 2) and is_var(args[0]):
-                result = env[args[0]] = evaluate(args[1], env)
+                result = env[args[0]] = eval(args[1], env)
 
         return result
 
@@ -119,7 +119,7 @@ def eval_func(args, env):
                                 params, args_ = [params], [args_]
                         env__  = {**env, **dict(zip(params, args_))}
                         for e in args[1:]:
-                                result = evaluate(e, env__)
+                                result = eval(e, env__)
 
                         return result
 
@@ -143,8 +143,8 @@ def eval_macro(args, env):
                                         params, args_ = [params], [args_]
                                 env__ = {**env, **dict(zip(params, args_))}
                                 for e in args[2:]:
-                                        code   = evaluate(e,    env__)
-                                        result = evaluate(code, env_)
+                                        code   = eval(e,    env__)
+                                        result = eval(code, env_)
 
                         return result
 
@@ -240,7 +240,7 @@ def eval_gt(args, env):
 
         return result
 
-def evaluate(exp, env):
+def eval(exp, env):
         """
         Evaluates.
         """
@@ -257,7 +257,7 @@ def evaluate(exp, env):
                         result = exp
         elif is_list(exp):
                 if exp:
-                        func = evaluate(exp[0], env)
+                        func = eval(exp[0], env)
                         if isinstance(func, types.FunctionType):
                                 result = func(exp[1:], env)
                 else:
