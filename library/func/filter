@@ -1,7 +1,7 @@
 (def filter
      (func (f l)
            (if (atom l)
-               (no_eval)
+               (ne)
                (block (def l_ ())
                       (for e l
                            (if (f e)

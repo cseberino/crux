@@ -85,7 +85,7 @@ class Tester(unittest.TestCase):
                 self.assertTrue( eval.is_atom(53))
                 self.assertTrue( eval.is_atom(-53))
                 self.assertTrue( eval.is_atom("abc"))
-                self.assertTrue( eval.is_atom(eval.eval_no_eval))
+                self.assertTrue( eval.is_atom(eval.eval_ne))
                 self.assertTrue( eval.is_atom(eval.eval_if))
                 self.assertTrue( eval.is_atom(("abc",)))
                 self.assertTrue( eval.is_atom(("a3",)))
@@ -134,44 +134,44 @@ class Tester(unittest.TestCase):
                 self.assertFalse(eval.is_list([2.6]))
                 self.assertFalse(eval.is_list([None]))
 
-        def test_no_eval(self):
-                output = eval.eval_no_eval([True], {})
+        def test_ne(self):
+                output = eval.eval_ne([True], {})
                 answer = True
                 self.assertEqual(output, answer)
 
-                output = eval.eval_no_eval([4], {})
+                output = eval.eval_ne([4], {})
                 answer = 4
                 self.assertEqual(output, answer)
 
-                output = eval.eval_no_eval([-234], {})
+                output = eval.eval_ne([-234], {})
                 answer = -234
                 self.assertEqual(output, answer)
 
-                output = eval.eval_no_eval([True], {})
+                output = eval.eval_ne([True], {})
                 answer = True
                 self.assertEqual(output, answer)
 
-                output = eval.eval_no_eval(["abc"], {})
+                output = eval.eval_ne(["abc"], {})
                 answer = "abc"
                 self.assertEqual(output, answer)
 
-                output = eval.eval_no_eval([[True, 4, "abc"]], {})
+                output = eval.eval_ne([[True, 4, "abc"]], {})
                 answer = [True, 4, "abc"]
                 self.assertEqual(output, answer)
 
-                output = eval.eval_no_eval([True, 4], {})
+                output = eval.eval_ne([True, 4], {})
                 answer = None
                 self.assertEqual(output, answer)
 
-                output = eval.eval_no_eval([True, 4, "abc"], {})
+                output = eval.eval_ne([True, 4, "abc"], {})
                 answer = None
                 self.assertEqual(output, answer)
 
-                output = eval.eval_no_eval([True, []], {})
+                output = eval.eval_ne([True, []], {})
                 answer = None
                 self.assertEqual(output, answer)
 
-                output = eval.eval_no_eval([], {})
+                output = eval.eval_ne([], {})
                 answer = None
                 self.assertEqual(output, answer)
 
@@ -248,7 +248,7 @@ class Tester(unittest.TestCase):
                 answer = True
                 self.assertEqual(output, answer)
 
-                output = eval.eval_atom([eval.eval_no_eval], {})
+                output = eval.eval_atom([eval.eval_ne], {})
                 answer = True
                 self.assertEqual(output, answer)
 
@@ -256,11 +256,11 @@ class Tester(unittest.TestCase):
                 answer = False
                 self.assertEqual(output, answer)
 
-                output = eval.eval_atom([[("no_eval",), 4]], {})
+                output = eval.eval_atom([[("ne",), 4]], {})
                 answer = True
                 self.assertEqual(output, answer)
 
-                output = eval.eval_atom([[("no_eval",), [3]]], {})
+                output = eval.eval_atom([[("ne",), [3]]], {})
                 answer = False
                 self.assertEqual(output, answer)
 
@@ -313,8 +313,8 @@ class Tester(unittest.TestCase):
                 answer = True
                 self.assertEqual(output, answer)
 
-                e = [("no_eval",), [3, 4]]
-                f = [("no_eval",), [3, 5]]
+                e = [("ne",), [3, 4]]
+                f = [("ne",), [3, 5]]
 
                 output = eval.eval_equal([e, e], {})
                 answer = True
@@ -329,47 +329,47 @@ class Tester(unittest.TestCase):
                 self.assertEqual(output, answer)
 
         def test_first(self):
-                l      = [("no_eval",), [3, 5]]
+                l      = [("ne",), [3, 5]]
                 output = eval.eval_first([l], {})
                 answer = 3
                 self.assertEqual(output, answer)
 
-                l      = [("no_eval",), True]
+                l      = [("ne",), True]
                 output = eval.eval_first([l], {})
                 answer = None
                 self.assertEqual(output, answer)
 
-                l      = [("no_eval",), False]
+                l      = [("ne",), False]
                 output = eval.eval_first([l], {})
                 answer = None
                 self.assertEqual(output, answer)
 
-                l      = [("no_eval",), 57]
+                l      = [("ne",), 57]
                 output = eval.eval_first([l], {})
                 answer = None
                 self.assertEqual(output, answer)
 
-                l      = [("no_eval",), -57]
+                l      = [("ne",), -57]
                 output = eval.eval_first([l], {})
                 answer = None
                 self.assertEqual(output, answer)
 
-                l      = [("no_eval",), "abc"]
+                l      = [("ne",), "abc"]
                 output = eval.eval_first([l], {})
                 answer = None
                 self.assertEqual(output, answer)
 
-                l      = [("no_eval",), [[], 5]]
+                l      = [("ne",), [[], 5]]
                 output = eval.eval_first([l], {})
                 answer = []
                 self.assertEqual(output, answer)
 
-                l      = [("no_eval",), [[False, "abc"], True]]
+                l      = [("ne",), [[False, "abc"], True]]
                 output = eval.eval_first([l], {})
                 answer = [False, "abc"]
                 self.assertEqual(output, answer)
 
-                l      = [("no_eval",), [[False, "abc"], [6, "abc", False]]]
+                l      = [("ne",), [[False, "abc"], [6, "abc", False]]]
                 output = eval.eval_first([l], {})
                 answer = [False, "abc"]
                 self.assertEqual(output, answer)
@@ -380,47 +380,47 @@ class Tester(unittest.TestCase):
                 self.assertEqual(output, answer)
 
         def test_rest(self):
-                l      = [("no_eval",), [3, 5]]
+                l      = [("ne",), [3, 5]]
                 output = eval.eval_rest([l], {})
                 answer = [5]
                 self.assertEqual(output, answer)
 
-                l      = [("no_eval",), True]
+                l      = [("ne",), True]
                 output = eval.eval_rest([l], {})
                 answer = None
                 self.assertEqual(output, answer)
 
-                l      = [("no_eval",), False]
+                l      = [("ne",), False]
                 output = eval.eval_rest([l], {})
                 answer = None
                 self.assertEqual(output, answer)
 
-                l      = [("no_eval",), 57]
+                l      = [("ne",), 57]
                 output = eval.eval_rest([l], {})
                 answer = None
                 self.assertEqual(output, answer)
 
-                l      = [("no_eval",), -57]
+                l      = [("ne",), -57]
                 output = eval.eval_rest([l], {})
                 answer = None
                 self.assertEqual(output, answer)
 
-                l      = [("no_eval",), "abc"]
+                l      = [("ne",), "abc"]
                 output = eval.eval_rest([l], {})
                 answer = None
                 self.assertEqual(output, answer)
 
-                l      = [("no_eval",), [[], 5]]
+                l      = [("ne",), [[], 5]]
                 output = eval.eval_rest([l], {})
                 answer = [5]
                 self.assertEqual(output, answer)
 
-                l      = [("no_eval",), [[False, "abc"], True]]
+                l      = [("ne",), [[False, "abc"], True]]
                 output = eval.eval_rest([l], {})
                 answer = [True]
                 self.assertEqual(output, answer)
 
-                l      = [("no_eval",), [[False, "abc"], [6, "abc", False]]]
+                l      = [("ne",), [[False, "abc"], [6, "abc", False]]]
                 output = eval.eval_rest([l], {})
                 answer = [[6, "abc", False]]
                 self.assertEqual(output, answer)
@@ -436,12 +436,12 @@ class Tester(unittest.TestCase):
                 answer = [3]
                 self.assertEqual(output, answer)
 
-                l      = [("no_eval",), [True, -4]]
+                l      = [("ne",), [True, -4]]
                 output = eval.eval_append([l, False], {})
                 answer = [True, -4, False]
                 self.assertEqual(output, answer)
 
-                l      = [("no_eval",), ["abc", []]]
+                l      = [("ne",), ["abc", []]]
                 output = eval.eval_append([l, l], {})
                 answer = ["abc", [], ["abc", []]]
                 self.assertEqual(output, answer)
@@ -450,7 +450,7 @@ class Tester(unittest.TestCase):
                 answer = None
                 self.assertEqual(output, answer)
 
-                l      = [("no_eval",), ["abc", []]]
+                l      = [("ne",), ["abc", []]]
                 output = eval.eval_append([l, 3, 4], {})
                 answer = None
                 self.assertEqual(output, answer)
@@ -586,14 +586,14 @@ class Tester(unittest.TestCase):
                 self.assertEqual(extra["&^%",], -62)
 
                 extra  = {}
-                l      = [("no_eval",), [2, 4]]
+                l      = [("ne",), [2, 4]]
                 output = eval.eval_def([("k9;",), l], extra)
                 answer = l[1]
                 self.assertEqual(output, answer)
                 self.assertEqual(extra["k9;",], [2, 4])
 
                 extra  = {}
-                l      = [("no_eval",), [2, True, []]]
+                l      = [("ne",), [2, True, []]]
                 output = eval.eval_def([("x",), l], extra)
                 answer = l[1]
                 self.assertEqual(output, answer)
@@ -701,8 +701,8 @@ class Tester(unittest.TestCase):
                 answer = "abc"
                 self.assertEqual(output, answer)
 
-                output = eval.eval(("no_eval",), {})
-                answer = eval.eval_no_eval
+                output = eval.eval(("ne",), {})
+                answer = eval.eval_ne
                 self.assertEqual(output, answer)
 
                 output = eval.eval(eval.eval_negate, {})
@@ -717,11 +717,11 @@ class Tester(unittest.TestCase):
                 answer = []
                 self.assertEqual(output, answer)
 
-                output = eval.eval([("no_eval",), [4, True]], {})
+                output = eval.eval([("ne",), [4, True]], {})
                 answer = [4, True]
                 self.assertEqual(output, answer)
 
-                l      = [("append",), [("no_eval",), ["abc", 5]], False]
+                l      = [("append",), [("ne",), ["abc", 5]], False]
                 output = eval.eval(l, {})
                 answer = ["abc", 5, False]
                 self.assertEqual(output, answer)
@@ -976,7 +976,7 @@ False
 
                 program = \
 '''
-(no_eval ( 4 6 ))
+(ne ( 4 6 ))
 (add 80 21)
 
 (negate -6)
@@ -1001,20 +1001,20 @@ True
 False
 -15
 "hello"
-(no_eval (5 False))
-(no_eval (5 "hello" False))
+(ne (5 False))
+(ne (5 "hello" False))
 (if (add 5 -5) -26 -91)
 ((func (x) (add x 5)) 10)
 (def x 5)
 (add -2 (negate x))
 (atom True)
 (atom ())
-(atom no_eval)
+(atom ne)
 (equal 4 4)
 (equal -9 9)
-(first (no_eval (4 5 6)))
-(rest (no_eval (4 5 6)))
-(append (no_eval (4 5 6)) 7)
+(first  (ne (4 5 6)))
+(rest   (ne (4 5 6)))
+(append (ne (4 5 6)) 7)
 (add 1 2)
 (negate 9)
 (gt 9 8)
@@ -1050,14 +1050,14 @@ False
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
 
-                program =  "(atom no_eval)"
+                program =  "(atom ne)"
                 answer  = b"True\n"
                 open("__program__", "w").write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
 
-                program =  '(no_eval (5 "hello" False))'
+                program =  '(ne (5 "hello" False))'
                 answer  = b'(5 "hello" False)\n'
                 open("__program__", "w").write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
@@ -1072,8 +1072,8 @@ False
                 subprocess.call(["rm", "__program__"])
 
         def test_crux(self):
-                program = "no_eval"
-                answer  = FUNC.format("no_eval").encode() + b"\n"
+                program = "ne"
+                answer  = FUNC.format("ne").encode() + b"\n"
                 open("__program__", "w").write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertTrue(re.match(answer, output))
@@ -1179,7 +1179,7 @@ False
 
                 program = \
 '''
-(no_eval ( 4 6 ))
+(ne ( 4 6 ))
 (add 80 21)
 
 (6 7)
@@ -1201,7 +1201,7 @@ None
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
 
-                program =  "(no_eval (3 5()"
+                program =  "(ne (3 5()"
                 answer  = b"None\n"
                 open("__program__", "w").write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
@@ -1304,7 +1304,7 @@ b'''\
 # Macros can create special (irregular) functions.
 
 # The following macro leads to "(if a True b)".
-(macro true-or-second (a b) (append (append (append (no_eval (if)) a) True) b))
+(macro true-or-second (a b) (append (append (append (ne (if)) a) True) b))
 
 # Gets replaced with "(if (add 1 5) True (negate 6))".
 (true-or-second (add 1 5)  (negate 6))
@@ -1349,7 +1349,7 @@ True
 (and 0     ())
 
 (and 24    "hello")
-(and True  (no_eval (1 2)))
+(and True  (ne (1 2)))
 '''
                 answer  = \
 b'''\
@@ -1383,7 +1383,7 @@ True
 (or 0     ())
 
 (or 24    "hello")
-(or True  (no_eval (1 2)))
+(or True  (ne (1 2)))
 '''
                 answer  = \
 b'''\
@@ -1641,10 +1641,10 @@ False
                 program = \
 '''
 (len ())
-(len (no_eval (1)))
-(len (no_eval (1 2)))
-(len (no_eval (1 2 3)))
-(len (no_eval ( (+ 1 2) True "hello" ("a" "b" "c" 4) )))
+(len (ne (1)))
+(len (ne (1 2)))
+(len (ne (1 2 3)))
+(len (ne ( (+ 1 2) True "hello" ("a" "b" "c" 4) )))
 '''
                 answer  = \
 b'''\
@@ -1680,16 +1680,16 @@ b'''\
         def test_index(self):
                 program = \
 '''
-(index (no_eval (10 11 12))  0)
-(index (no_eval (10 11 12))  1)
-(index (no_eval (10 11 12))  2)
-(index (no_eval (10 11 12)) -1)
-(index (no_eval (10 11 12)) -2)
-(index (no_eval (10 11 12)) -3)
-(index (no_eval (34 35))  0)
-(index (no_eval (34 35))  1)
-(index (no_eval (34 35)) -1)
-(index (no_eval (34 35)) -2)
+(index (ne (10 11 12))  0)
+(index (ne (10 11 12))  1)
+(index (ne (10 11 12))  2)
+(index (ne (10 11 12)) -1)
+(index (ne (10 11 12)) -2)
+(index (ne (10 11 12)) -3)
+(index (ne (34 35))  0)
+(index (ne (34 35))  1)
+(index (ne (34 35)) -1)
+(index (ne (34 35)) -2)
 '''
                 answer  = \
 b'''\
@@ -1784,11 +1784,11 @@ b'''\
         def test_reverse(self):
                 program = \
 '''
-(reverse (no_eval (1 2 3 4)))
-(reverse (no_eval (1 2 3)))
-(reverse (no_eval (1 2)))
-(reverse (no_eval (1)))
-(reverse (no_eval ()))
+(reverse (ne (1 2 3 4)))
+(reverse (ne (1 2 3)))
+(reverse (ne (1 2)))
+(reverse (ne (1)))
+(reverse (ne ()))
 (reverse (list (+ 10 3) (* 3 4) (- 99 88)))
 '''
                 answer  = \
@@ -1994,7 +1994,7 @@ b'''\
 
                 program = \
 '''
-(macro head args (append (no_eval (first)) (extend (no_eval (list)) args)))
+(macro head args (append (ne (first)) (extend (ne (list)) args)))
 (head 1 2 3)
 (head "bat" "ball" "rock")
 '''
@@ -2012,7 +2012,7 @@ b'''\
 
                 program = \
 '''
-(macro tail args (append (no_eval (rest)) (extend (no_eval (list)) args)))
+(macro tail args (append (ne (rest)) (extend (ne (list)) args)))
 (tail "bat" "ball" "rock")
 '''
                 answer  = \
@@ -2162,12 +2162,12 @@ p
 squares
 
 (def p 10)
-(for i (no_eval (3 4 5))
+(for i (ne (3 4 5))
      (def p (+ p i)))
 p
 
 (def squares ())
-(for i (no_eval (0 1 2 3 4 5 6 7 8 9 10))
+(for i (ne (0 1 2 3 4 5 6 7 8 9 10))
      (def squares (append squares (^ i 2))))
 squares
 
@@ -2232,19 +2232,19 @@ None
 (def g (func (x) x))
 
 # Evaluating lists involves evaluating all the list elements.
-# f evaluates to a function and (no_eval k) evaluates to k.
+# f evaluates to a function and (ne k) evaluates to k.
 # In the environment, x will be associated with k.
 # The result involves evaluating (g x) with the new environment.
 # The result of evaluating (g x) with the new environment is the result of
 #    invoking the function associated with g on k.
 
-(f (no_eval k))
+(f (ne k))
 
-# g evaluates to a function and (no_eval k) evaluates to k.
+# g evaluates to a function and (ne k) evaluates to k.
 # In the environment, x will be associated with k.
 # The result involves evaluating x with the new environment.
 
-(g (no_eval k))
+(g (ne k))
 
 # g evaluates to a function and k cannot be evaluated.
 
@@ -2266,14 +2266,14 @@ None
         def test_wrong_numbers_of_args(self):
                 program = \
 '''
-(no_eval 1 2 3 4 5 6)
+(ne 1 2 3 4 5 6)
 (if     1 2 3 4 5 6)
 (def x  1 2 3 4 5 6)
 (atom   1 2 3 4 5 6)
 (equal  1 2 3 4 5 6)
-(first  (no_eval (1 2 3)) (no_eval (4 5 6)))
-(rest   (no_eval (1 2 3)) (no_eval (4 5 6)))
-(append (no_eval (1 2 3)) 4 5 6)
+(first  (ne (1 2 3)) (ne (4 5 6)))
+(rest   (ne (1 2 3)) (ne (4 5 6)))
+(append (ne (1 2 3)) 4 5 6)
 (add    1 2 3 4 5 6)
 (negate 1 2 3 4 5 6)
 (gt     1 2 3 4 5 6)
@@ -2292,17 +2292,17 @@ None
 (and    1 2 3 4 5 6)
 (not    1 2 3 4 5 6)
 (or     1 2 3 4 5 6)
-(map not (no_eval (1 2 3)) (no_eval (4 5 6)))
-(extend  (no_eval (1 2 3)) (no_eval (4 5 6)) (no_eval (7 8 9)))
-(last    (no_eval (1 2 3)) (no_eval (4 5 6)))
-(reverse (no_eval (1 2 3)) (no_eval (4 5 6)))
-(slice   (no_eval (1 2 3)) 4 5 6)
-(zip     (no_eval (1 2 3)) (no_eval (4 5 6)) (no_eval (7 8 9)))
-(index   (no_eval (1 2 3)) 4 5 6)
-(len     (no_eval (1 2 3)) (no_eval (4 5 6)))
+(map not (ne (1 2 3)) (ne (4 5 6)))
+(extend  (ne (1 2 3)) (ne (4 5 6)) (ne (7 8 9)))
+(last    (ne (1 2 3)) (ne (4 5 6)))
+(reverse (ne (1 2 3)) (ne (4 5 6)))
+(slice   (ne (1 2 3)) 4 5 6)
+(zip     (ne (1 2 3)) (ne (4 5 6)) (ne (7 8 9)))
+(index   (ne (1 2 3)) 4 5 6)
+(len     (ne (1 2 3)) (ne (4 5 6)))
 (range  1 2 3 4 5 6)
-(second  (no_eval (1 2 3)) (no_eval (4 5 6)))
-(third   (no_eval (1 2 3)) (no_eval (4 5 6)))
+(second  (ne (1 2 3)) (ne (4 5 6)))
+(third   (ne (1 2 3)) (ne (4 5 6)))
 '''
                 answer  = len([e for e in program.split("\n") if e]) * \
 b'''\
@@ -2452,7 +2452,7 @@ None
         def test_no_args(self):
                 program = \
 '''
-(no_eval)
+(ne)
 (if)
 (def)
 (func)
@@ -2835,7 +2835,7 @@ None
 (xor 0     ())
 
 (xor 24    "hello")
-(xor True  (no_eval (1 2)))
+(xor True  (ne (1 2)))
 
 (xor)
 (xor 1 2 3 4 5)

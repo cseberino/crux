@@ -65,7 +65,7 @@ def regular(n_args, any_len = False):
 
         return decor
 
-def eval_no_eval(args, env):
+def eval_ne(args, env):
         """
         Helps.
         """
