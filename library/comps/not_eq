@@ -1,1 +1,1 @@
-(def != (func (a b) (not (= a b))))
+(set != (func (a b) (not (= a b))))

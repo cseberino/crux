@@ -119,13 +119,13 @@ class Tester(unittest.TestCase):
                 self.assertFalse(eval.is_atom(["abc"]))
 
                 self.assertTrue( eval.is_list(["abc"]))
-                self.assertTrue( eval.is_list(["abc", "def"]))
+                self.assertTrue( eval.is_list(["abc", "set"]))
                 self.assertTrue( eval.is_list([3, ["a", "b"]]))
                 self.assertTrue( eval.is_list([3, [["a", "b"], "c"]]))
                 self.assertTrue( eval.is_list([False]))
                 self.assertTrue( eval.is_list(["abc",]))
-                self.assertTrue( eval.is_list([True, 3, "def"]))
-                self.assertTrue( eval.is_list([[True], [3], ["def"]]))
+                self.assertTrue( eval.is_list([True, 3, "set"]))
+                self.assertTrue( eval.is_list([[True], [3], ["set"]]))
                 self.assertFalse(eval.is_list("abc"))
                 self.assertFalse(eval.is_list(True))
                 self.assertFalse(eval.is_list(False))
@@ -566,47 +566,47 @@ class Tester(unittest.TestCase):
                 answer = None
                 self.assertEqual(output, answer)
 
-        def test_def(self):
+        def test_set(self):
                 extra  = {}
-                output = eval.eval_def([("x",), True], extra)
+                output = eval.eval_set([("x",), True], extra)
                 answer = True
                 self.assertEqual(output, answer)
                 self.assertEqual(extra["x",], True)
 
                 extra  = {}
-                output = eval.eval_def([("abc",), 4], extra)
+                output = eval.eval_set([("abc",), 4], extra)
                 answer = 4
                 self.assertEqual(output, answer)
                 self.assertEqual(extra["abc",], 4)
 
                 extra  = {}
-                output = eval.eval_def([("&^%",), -62], extra)
+                output = eval.eval_set([("&^%",), -62], extra)
                 answer = -62
                 self.assertEqual(output, answer)
                 self.assertEqual(extra["&^%",], -62)
 
                 extra  = {}
                 l      = [("ne",), [2, 4]]
-                output = eval.eval_def([("k9;",), l], extra)
+                output = eval.eval_set([("k9;",), l], extra)
                 answer = l[1]
                 self.assertEqual(output, answer)
                 self.assertEqual(extra["k9;",], [2, 4])
 
                 extra  = {}
                 l      = [("ne",), [2, True, []]]
-                output = eval.eval_def([("x",), l], extra)
+                output = eval.eval_set([("x",), l], extra)
                 answer = l[1]
                 self.assertEqual(output, answer)
                 self.assertEqual(extra["x",], [2, True, []])
 
                 extra  = {}
-                output = eval.eval_def([("x",), []], extra)
+                output = eval.eval_set([("x",), []], extra)
                 answer = []
                 self.assertEqual(output, answer)
                 self.assertEqual(extra["x",], [])
 
                 extra  = {}
-                output = eval.eval_def([("[n9",), 3, 2], extra)
+                output = eval.eval_set([("[n9",), 3, 2], extra)
                 answer = None
                 self.assertEqual(output, answer)
                 self.assertTrue(("[n9",) not in extra)
@@ -1005,7 +1005,7 @@ False
 (ne (5 "hello" False))
 (if (add 5 -5) -26 -91)
 ((func (x) (add x 5)) 10)
-(def x 5)
+(set x 5)
 (add -2 (negate x))
 (atom True)
 (atom ())
@@ -1208,7 +1208,7 @@ None
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
 
-                program =  "(def αβΔ 46) αβΔ"
+                program =  "(set αβΔ 46) αβΔ"
                 answer  = b"46\n46\n"
                 open("__program__", "w").write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
@@ -1261,11 +1261,11 @@ b'''\
         def test_early_binding(self):
                 program = \
 '''
-(def x 1)
-(def f (func () x))
-(def g (func (x) (f)))
+(set x 1)
+(set f (func () x))
+(set g (func (x) (f)))
 (g 2)
-(def x 3)
+(set x 3)
 (g 2)
 '''
                 answer  = \
@@ -1452,7 +1452,7 @@ False
         def test_recursion(self):
                 program = \
 '''
-(def adder
+(set adder
      (func (n)
            (if (<= n 1)
                n
@@ -1744,7 +1744,7 @@ None
 '''
 (block 1 2 3 4)
 (block "hello")
-(block (def a 2) (def b 3))
+(block (set a 2) (set b 3))
 (* a b)
 (block)
 '''
@@ -2029,38 +2029,38 @@ b'''\
         def test_while(self):
                 program = \
 '''
-(def i 5)
+(set i 5)
 (while (< i 10)
-       (def i (+ i 1)))
+       (set i (+ i 1)))
 i
 
-(def i 100)
+(set i 100)
 (while (< i 150)
-       (def i (+ i 1)))
+       (set i (+ i 1)))
 i
 
-(def i 100)
-(def j 200)
+(set i 100)
+(set j 200)
 (while (< i 150)
-       (def i (+ i 1))
-       (def j (+ j 1)))
+       (set i (+ i 1))
+       (set j (+ j 1)))
 i
 j
 
-(def i 100)
-(def j 200)
+(set i 100)
+(set j 200)
 (while (< (+ i j) 400)
-       (def i (+ i 1))
-       (def j (+ j 1)))
+       (set i (+ i 1))
+       (set j (+ j 1)))
 i
 j
 
-(def i 100)
-(def j 200)
+(set i 100)
+(set j 200)
 (while (< (+ i j) 400)
        (+ 1 1 1)
-       (def i (+ i 1))
-       (def j (+ j 1)))
+       (set i (+ i 1))
+       (set j (+ j 1)))
 i
 j
 
@@ -2098,12 +2098,12 @@ None
 
                 program = \
 '''
-(def fact
+(set fact
      (func (n)
-           (def sum 1)
+           (set sum 1)
            (while (>= n 1)
-                  (def sum (* sum n))
-                  (def n   (- n   1)))
+                  (set sum (* sum n))
+                  (set n   (- n   1)))
            sum))
 (fact  3)
 (fact 10)
@@ -2151,29 +2151,29 @@ b'''\
         def test_for(self):
                 program = \
 '''
-(def p 10)
+(set p 10)
 (for i (list 3 4 5)
-     (def p (+ p i)))
+     (set p (+ p i)))
 p
 
-(def squares ())
+(set squares ())
 (for i (list 0 1 2 3 4 5 6 7 8 9 10)
-     (def squares (append squares (^ i 2))))
+     (set squares (append squares (^ i 2))))
 squares
 
-(def p 10)
+(set p 10)
 (for i (ne (3 4 5))
-     (def p (+ p i)))
+     (set p (+ p i)))
 p
 
-(def squares ())
+(set squares ())
 (for i (ne (0 1 2 3 4 5 6 7 8 9 10))
-     (def squares (append squares (^ i 2))))
+     (set squares (append squares (^ i 2))))
 squares
 
-(def cubes ())
+(set cubes ())
 (for i (range 0 5 1)
-     (def cubes (append cubes (^ i 3))))
+     (set cubes (append cubes (^ i 3))))
 cubes
 
 (for)
@@ -2228,8 +2228,8 @@ None
 # (func (x) (g x)) and (func (x) x) are not functions but rather lists that
 #    evaluate to functions.
 
-(def f (func (x) (g x)))
-(def g (func (x) x))
+(set f (func (x) (g x)))
+(set g (func (x) x))
 
 # Evaluating lists involves evaluating all the list elements.
 # f evaluates to a function and (ne k) evaluates to k.
@@ -2268,7 +2268,7 @@ None
 '''
 (ne 1 2 3 4 5 6)
 (if     1 2 3 4 5 6)
-(def x  1 2 3 4 5 6)
+(set x  1 2 3 4 5 6)
 (atom   1 2 3 4 5 6)
 (equal  1 2 3 4 5 6)
 (first  (ne (1 2 3)) (ne (4 5 6)))
@@ -2316,7 +2316,7 @@ None
         def test_wrong_types(self):
                 program = \
 '''
-(def  1 2)
+(set  1 2)
 (func 1 2)
 (macro x   1  2)
 (macro 1 (x)  2)
@@ -2380,7 +2380,7 @@ None
 '''
 (if (+ 1 1 1)         2         3)
 (if 2         (+ 1 1 1)         3)
-(def x (+ 1 1 1))
+(set x (+ 1 1 1))
 (atom  (+ 1 1 1))
 (equal (+ 1 1 1)         2)
 (equal 2         (+ 1 1 1))
@@ -2454,7 +2454,7 @@ None
 '''
 (ne)
 (if)
-(def)
+(set)
 (func)
 (macro)
 (atom)
@@ -2584,10 +2584,10 @@ None
 '''
 # The for loop must find a corresponding list for l in the environment.
 
-(def adder
+(set adder
      (func (l beg)
-           (def sum beg)
-           (for i l (def sum (+ sum i)))
+           (set sum beg)
+           (for i l (set sum (+ sum i)))
            sum))
 
 # The first argument passed to the adder is (5 10 15 20).

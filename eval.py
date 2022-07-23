@@ -92,7 +92,7 @@ def eval_if(args, env):
 
         return result
 
-def eval_def(args, env):
+def eval_set(args, env):
         """
         Helps.
         """

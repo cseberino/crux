@@ -1,6 +1,6 @@
-(def reduce
+(set reduce
      (func (f l)
-           (def result (f (first l) (second l)))
+           (set result (f (first l) (second l)))
            (for e (rest (rest l))
-                (def result (f result e)))
+                (set result (f result e)))
            result))

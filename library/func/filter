@@ -1,10 +1,10 @@
-(def filter
+(set filter
      (func (f l)
            (if (atom l)
                (ne)
-               (block (def l_ ())
+               (block (set l_ ())
                       (for e l
                            (if (f e)
-                               (def l_ (append l_ e))
+                               (set l_ (append l_ e))
                                ()))
                       l_))))

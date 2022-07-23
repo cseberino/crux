@@ -1,4 +1,4 @@
-(def /
+(set /
      (func (a b)
            (if (= b 0)
                (ne)

@@ -15,7 +15,7 @@ involve special evaluation procedures:
 
         ne
         if
-        def
+        set
         func
         macro
         atom

@@ -1,7 +1,7 @@
 (macro for args
        (if (and (>= (len args) 2) (atom (first args)))
            (append (append (append (ne (if)) (append (append (ne (=)) (second
-           args)) ())) True) (append (extend (append (ne (block)) (list (ne def)
+           args)) ())) True) (append (extend (append (ne (block)) (list (ne set)
            (first args) (append (ne (first)) (second args)))) (rest (rest
            args))) (extend (list (ne for) (first args) (append (ne (rest))
            (second args))) (rest (rest args))))) (ne)))

@@ -1,6 +1,6 @@
-(def extend
+(set extend
      (func (l ext)
-           (def extend_
+           (set extend_
                 (func (l_ ext_)
                       (if (= ext_ ())
                           l_

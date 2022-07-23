@@ -1,6 +1,6 @@
-(def map
+(set map
      (func (f l)
-           (def map_
+           (set map_
                 (func (f_ l_)
                       (if (= l_ ())
                           ()

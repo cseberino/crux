@@ -1,1 +1,1 @@
-(def second (func (l) (index l 1)))
+(set second (func (l) (index l 1)))

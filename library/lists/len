@@ -1,4 +1,4 @@
-(def len
+(set len
      (func (l)
            (if (= l ())
                0

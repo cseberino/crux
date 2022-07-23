@@ -1,1 +1,1 @@
-(def ~ (func (a) (- (negate a) 1)))
+(set ~ (func (a) (- (negate a) 1)))

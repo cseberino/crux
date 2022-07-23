@@ -1,4 +1,4 @@
-(def index
+(set index
      (func (l i)
            (if (= i 0)
                (first l)

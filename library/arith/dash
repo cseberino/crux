@@ -1,4 +1,4 @@
-(def -
+(set -
      (func args
            (if (= (len args) 1)
                (negate (first args))

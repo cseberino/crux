@@ -1,1 +1,1 @@
-(def not (func (a) (if a False True)))
+(set not (func (a) (if a False True)))

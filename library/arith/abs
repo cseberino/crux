@@ -1,1 +1,1 @@
-(def abs (func (a) (if (>= a 0) a (- a))))
+(set abs (func (a) (if (>= a 0) a (- a))))

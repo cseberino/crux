@@ -1,4 +1,4 @@
-(def reverse
+(set reverse
      (func (l)
            (if (= l ())
                ()
