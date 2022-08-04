@@ -4,22 +4,22 @@ a minimal Lisp variant
 
 One of the simplest practical programming languages is Lisp.  Programs contain
 expressions which are atoms or lists.  Atoms are booleans, integers, strings,
-variables or functions.  Lists can contain other lists.
+variables, functions or macros.  Lists can contain other lists.
 
 Running programs is evaluating expressions.  Evaluating atoms, except for
 variables, returns them.  Evaluating variables involves environments.
-Evaluating lists involves function invocations.
+Evaluating lists involves function or macro invocations.
 
 The following functions are always in the environment.  The first five functions
-involve special evaluation procedures:
+involve special evaluation procedures.
 
         ne
         if
         set
         func
         macro
-        atom
         equal
+        atom
         first
         rest
         append

@@ -152,14 +152,6 @@ def eval_macro(args, env):
 
         return result
 
-@regular(1)
-def eval_atom(args, env):
-        """
-        Helps.
-        """
-
-        return is_atom(args[0])
-
 @regular(2)
 def eval_equal(args, env):
         """
@@ -167,6 +159,14 @@ def eval_equal(args, env):
         """
 
         return args[0] == args[1]
+
+@regular(1)
+def eval_atom(args, env):
+        """
+        Helps.
+        """
+
+        return is_atom(args[0])
 
 @regular(1)
 def eval_first(args, env):
