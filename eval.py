@@ -46,6 +46,13 @@ def is_list(exp):
         return isinstance(exp, list) and                                       \
                                     all(is_atom(e) or is_list(e) for e in exp)
 
+def is_var_list(exp):
+        """
+        Identifies.
+        """
+
+        return is_list(exp) and all(is_var(e) for e in exp)
+
 def regular(n_args, any_len = False):
         """
         Decorates.
@@ -109,8 +116,7 @@ def eval_func(args, env):
         """
 
         result = None
-        if (len(args) >= 2) and (is_var(args[0]) or                            \
-                      (is_list(args[0]) and all(is_var(e) for e in args[0]))):
+        if (len(args) >= 2) and (is_var(args[0]) or is_var_list(args[0])):
                 @regular(len(args[0]), is_var(args[0]))
                 def func(args_, env_):
                         result = None
@@ -133,22 +139,21 @@ def eval_macro(args, env):
         """
 
         result = None
-        if (len(args) >= 3) and is_var(args[0]) and (is_var(args[1]) or        \
-                      (is_list(args[1]) and all(is_var(e) for e in args[1]))):
+        if (len(args) >= 2) and (is_var(args[0]) or is_var_list(args[0])):
                 def macro(args_, env_):
                         result = None
-                        params = args[1]
+                        params = args[0]
                         if is_var(params) or (len(params) == len(args_)):
                                 if is_var(params):
                                         params, args_ = [params], [args_]
                                 env__ = {**env, **dict(zip(params, args_))}
-                                for e in args[2:]:
+                                for e in args[1:]:
                                         code   = eval(e,    env__)
                                         result = eval(code, env_)
 
                         return result
 
-                result = env[args[0]] = macro
+                result = macro
 
         return result
 

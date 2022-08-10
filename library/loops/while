@@ -1,5 +1,5 @@
-(macro while args
-       (if (>= (len args) 1)
-           (append (append (append (ne (if)) (first args)) (append (extend (ne
-           (block)) (rest args)) (extend (append (ne (while)) (first args))
-           (rest args)))) True) (ne)))
+(set while
+     (macro args
+            (if (>= (len args) 1) (append (append (append (ne (if)) (first
+            args)) (append (extend (ne (block)) (rest args)) (extend (append (ne
+            (while)) (first args)) (rest args)))) True) (ne))))

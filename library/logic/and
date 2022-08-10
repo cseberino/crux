@@ -1,3 +1,4 @@
-(macro and (a b)
-       (append (append (append (ne (if)) a) (append (append (append (ne (if)) b)
-       True) False)) False))
+(set and
+     (macro (a b)
+            (append (append (append (ne (if)) a) (append (append (append (ne
+            (if)) b) True) False)) False)))

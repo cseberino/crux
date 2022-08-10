@@ -1289,7 +1289,7 @@ b'''\
                 self.assertTrue(re.match(answer, output))
                 subprocess.call(["rm", "__program__"])
 
-                program = "(macro foo (x) 5)"
+                program = "(macro (x) 5)"
                 answer  = FUNC.format("macro.<locals>.macro").encode() + b"\n"
                 open("__program__", "w").write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
@@ -1304,7 +1304,7 @@ b'''\
 # Macros can create special (irregular) functions.
 
 # The following macro leads to "(if a True b)".
-(macro true-or-second (a b) (append (append (append (ne (if)) a) True) b))
+(set true-or-second (macro (a b) (append (append (append (ne (if)) a) True) b)))
 
 # Gets replaced with "(if (add 1 5) True (negate 6))".
 (true-or-second (add 1 5)  (negate 6))
@@ -1978,7 +1978,7 @@ b'''\
         def test_macro_any_len(self):
                 program = \
 '''
-(macro four args 4)
+(set four (macro args 4))
 (four 1 2 3)
 '''
                 answer  = \
@@ -1994,7 +1994,7 @@ b'''\
 
                 program = \
 '''
-(macro head args (append (ne (first)) (extend (ne (list)) args)))
+(set head (macro args (append (ne (first)) (extend (ne (list)) args))))
 (head 1 2 3)
 (head "bat" "ball" "rock")
 '''
@@ -2012,7 +2012,7 @@ b'''\
 
                 program = \
 '''
-(macro tail args (append (ne (rest)) (extend (ne (list)) args)))
+(set tail (macro args (append (ne (rest)) (extend (ne (list)) args))))
 (tail "bat" "ball" "rock")
 '''
                 answer  = \
@@ -2318,9 +2318,9 @@ None
 '''
 (set  1 2)
 (func 1 2)
-(macro x   1  2)
-(macro 1 (x)  2)
-(macro 1 args 2)
+(set x (macro 1    2))
+(set 1 (macro (x)  2))
+(set 1 (macro args 2))
 (first 1)
 (rest  1)
 (append 1 2)
