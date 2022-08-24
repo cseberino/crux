@@ -253,11 +253,9 @@ def eval(exp, env):
         result = None
         if   is_atom(exp):
                 if is_var(exp):
-                        if   exp in env:
+                        if exp in env:
                                 if is_atom(env[exp]) or is_list(env[exp]):
                                         result = env[exp]
-                        elif ("eval_" + exp[0]) in globals():
-                                result = globals()["eval_" + exp[0]]
                 else:
                         result = exp
         elif is_list(exp):

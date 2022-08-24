@@ -27,6 +27,8 @@ import re
 
 FUNC  = "<function (eval_{}|regular\.<locals>\.decor\.<locals>\.func_) "
 FUNC += "at 0x[0-9a-f]*>"
+ENV   = [e for e in dir(eval) if e.startswith("eval_")]
+ENV   = {(e[len("eval_"):],) : getattr(eval, e) for e in ENV}
 
 def create_crux_mod():
         subprocess.call(["cp", "../crux", "../__crux__.py"])
@@ -256,11 +258,11 @@ class Tester(unittest.TestCase):
                 answer = False
                 self.assertEqual(output, answer)
 
-                output = eval.eval_atom([[("ne",), 4]], {})
+                output = eval.eval_atom([[("ne",), 4]], ENV)
                 answer = True
                 self.assertEqual(output, answer)
 
-                output = eval.eval_atom([[("ne",), [3]]], {})
+                output = eval.eval_atom([[("ne",), [3]]], ENV)
                 answer = False
                 self.assertEqual(output, answer)
 
@@ -316,61 +318,61 @@ class Tester(unittest.TestCase):
                 e = [("ne",), [3, 4]]
                 f = [("ne",), [3, 5]]
 
-                output = eval.eval_equal([e, e], {})
+                output = eval.eval_equal([e, e], ENV)
                 answer = True
                 self.assertEqual(output, answer)
 
-                output = eval.eval_equal([e, e, e], {})
+                output = eval.eval_equal([e, e, e], ENV)
                 answer = None
                 self.assertEqual(output, answer)
 
-                output = eval.eval_equal([e, f], {})
+                output = eval.eval_equal([e, f], ENV)
                 answer = False
                 self.assertEqual(output, answer)
 
         def test_first(self):
                 l      = [("ne",), [3, 5]]
-                output = eval.eval_first([l], {})
+                output = eval.eval_first([l], ENV)
                 answer = 3
                 self.assertEqual(output, answer)
 
                 l      = [("ne",), True]
-                output = eval.eval_first([l], {})
+                output = eval.eval_first([l], ENV)
                 answer = None
                 self.assertEqual(output, answer)
 
                 l      = [("ne",), False]
-                output = eval.eval_first([l], {})
+                output = eval.eval_first([l], ENV)
                 answer = None
                 self.assertEqual(output, answer)
 
                 l      = [("ne",), 57]
-                output = eval.eval_first([l], {})
+                output = eval.eval_first([l], ENV)
                 answer = None
                 self.assertEqual(output, answer)
 
                 l      = [("ne",), -57]
-                output = eval.eval_first([l], {})
+                output = eval.eval_first([l], ENV)
                 answer = None
                 self.assertEqual(output, answer)
 
                 l      = [("ne",), "abc"]
-                output = eval.eval_first([l], {})
+                output = eval.eval_first([l], ENV)
                 answer = None
                 self.assertEqual(output, answer)
 
                 l      = [("ne",), [[], 5]]
-                output = eval.eval_first([l], {})
+                output = eval.eval_first([l], ENV)
                 answer = []
                 self.assertEqual(output, answer)
 
                 l      = [("ne",), [[False, "abc"], True]]
-                output = eval.eval_first([l], {})
+                output = eval.eval_first([l], ENV)
                 answer = [False, "abc"]
                 self.assertEqual(output, answer)
 
                 l      = [("ne",), [[False, "abc"], [6, "abc", False]]]
-                output = eval.eval_first([l], {})
+                output = eval.eval_first([l], ENV)
                 answer = [False, "abc"]
                 self.assertEqual(output, answer)
 
@@ -381,47 +383,47 @@ class Tester(unittest.TestCase):
 
         def test_rest(self):
                 l      = [("ne",), [3, 5]]
-                output = eval.eval_rest([l], {})
+                output = eval.eval_rest([l], ENV)
                 answer = [5]
                 self.assertEqual(output, answer)
 
                 l      = [("ne",), True]
-                output = eval.eval_rest([l], {})
+                output = eval.eval_rest([l], ENV)
                 answer = None
                 self.assertEqual(output, answer)
 
                 l      = [("ne",), False]
-                output = eval.eval_rest([l], {})
+                output = eval.eval_rest([l], ENV)
                 answer = None
                 self.assertEqual(output, answer)
 
                 l      = [("ne",), 57]
-                output = eval.eval_rest([l], {})
+                output = eval.eval_rest([l], ENV)
                 answer = None
                 self.assertEqual(output, answer)
 
                 l      = [("ne",), -57]
-                output = eval.eval_rest([l], {})
+                output = eval.eval_rest([l], ENV)
                 answer = None
                 self.assertEqual(output, answer)
 
                 l      = [("ne",), "abc"]
-                output = eval.eval_rest([l], {})
+                output = eval.eval_rest([l], ENV)
                 answer = None
                 self.assertEqual(output, answer)
 
                 l      = [("ne",), [[], 5]]
-                output = eval.eval_rest([l], {})
+                output = eval.eval_rest([l], ENV)
                 answer = [5]
                 self.assertEqual(output, answer)
 
                 l      = [("ne",), [[False, "abc"], True]]
-                output = eval.eval_rest([l], {})
+                output = eval.eval_rest([l], ENV)
                 answer = [True]
                 self.assertEqual(output, answer)
 
                 l      = [("ne",), [[False, "abc"], [6, "abc", False]]]
-                output = eval.eval_rest([l], {})
+                output = eval.eval_rest([l], ENV)
                 answer = [[6, "abc", False]]
                 self.assertEqual(output, answer)
 
@@ -437,12 +439,12 @@ class Tester(unittest.TestCase):
                 self.assertEqual(output, answer)
 
                 l      = [("ne",), [True, -4]]
-                output = eval.eval_append([l, False], {})
+                output = eval.eval_append([l, False], ENV)
                 answer = [True, -4, False]
                 self.assertEqual(output, answer)
 
                 l      = [("ne",), ["abc", []]]
-                output = eval.eval_append([l, l], {})
+                output = eval.eval_append([l, l], ENV)
                 answer = ["abc", [], ["abc", []]]
                 self.assertEqual(output, answer)
 
@@ -451,7 +453,7 @@ class Tester(unittest.TestCase):
                 self.assertEqual(output, answer)
 
                 l      = [("ne",), ["abc", []]]
-                output = eval.eval_append([l, 3, 4], {})
+                output = eval.eval_append([l, 3, 4], ENV)
                 answer = None
                 self.assertEqual(output, answer)
 
@@ -567,45 +569,45 @@ class Tester(unittest.TestCase):
                 self.assertEqual(output, answer)
 
         def test_set(self):
-                extra  = {}
+                extra  = ENV
                 output = eval.eval_set([("x",), True], extra)
                 answer = True
                 self.assertEqual(output, answer)
                 self.assertEqual(extra["x",], True)
 
-                extra  = {}
+                extra  = ENV
                 output = eval.eval_set([("abc",), 4], extra)
                 answer = 4
                 self.assertEqual(output, answer)
                 self.assertEqual(extra["abc",], 4)
 
-                extra  = {}
+                extra  = ENV
                 output = eval.eval_set([("&^%",), -62], extra)
                 answer = -62
                 self.assertEqual(output, answer)
                 self.assertEqual(extra["&^%",], -62)
 
-                extra  = {}
+                extra  = ENV
                 l      = [("ne",), [2, 4]]
                 output = eval.eval_set([("k9;",), l], extra)
                 answer = l[1]
                 self.assertEqual(output, answer)
                 self.assertEqual(extra["k9;",], [2, 4])
 
-                extra  = {}
+                extra  = ENV
                 l      = [("ne",), [2, True, []]]
                 output = eval.eval_set([("x",), l], extra)
                 answer = l[1]
                 self.assertEqual(output, answer)
                 self.assertEqual(extra["x",], [2, True, []])
 
-                extra  = {}
+                extra  = ENV
                 output = eval.eval_set([("x",), []], extra)
                 answer = []
                 self.assertEqual(output, answer)
                 self.assertEqual(extra["x",], [])
 
-                extra  = {}
+                extra  = ENV
                 output = eval.eval_set([("[n9",), 3, 2], extra)
                 answer = None
                 self.assertEqual(output, answer)
@@ -626,7 +628,7 @@ class Tester(unittest.TestCase):
                 body   = [("equal",), ("c",), ("d",)]
                 args   = [4, 4]
                 answer = True
-                uf     = eval.eval_func([params, body], {})
+                uf     = eval.eval_func([params, body], ENV)
                 output = uf(args, {})
                 self.assertEqual(output, answer)
 
@@ -634,7 +636,7 @@ class Tester(unittest.TestCase):
                 body   = [("equal",), ("e",), ("f",)]
                 args   = [4, 8]
                 answer = False
-                uf     = eval.eval_func([params, body], {})
+                uf     = eval.eval_func([params, body], ENV)
                 output = uf(args, {})
                 self.assertEqual(output, answer)
 
@@ -643,7 +645,7 @@ class Tester(unittest.TestCase):
                           [("append",), [("append",), [], ("g",)], ("h",)]]
                 args   = [5, 6]
                 answer = 5
-                uf     = eval.eval_func([params, body], {})
+                uf     = eval.eval_func([params, body], ENV)
                 output = uf(args, {})
                 self.assertEqual(output, answer)
 
@@ -652,7 +654,7 @@ class Tester(unittest.TestCase):
                           [("append",), [("append",), [], ("i",)], ("j",)]]
                 args   = [5, 6]
                 answer = [6]
-                uf     = eval.eval_func([params, body], {})
+                uf     = eval.eval_func([params, body], ENV)
                 output = uf(args, {})
                 self.assertEqual(output, answer)
 
@@ -660,7 +662,7 @@ class Tester(unittest.TestCase):
                 body   = [("add",), ("k",), ("l",)]
                 args   = [-62, 100]
                 answer = 38
-                uf     = eval.eval_func([params, body], {})
+                uf     = eval.eval_func([params, body], ENV)
                 output = uf(args, {})
                 self.assertEqual(output, answer)
 
@@ -701,7 +703,7 @@ class Tester(unittest.TestCase):
                 answer = "abc"
                 self.assertEqual(output, answer)
 
-                output = eval.eval(("ne",), {})
+                output = eval.eval(("ne",), ENV)
                 answer = eval.eval_ne
                 self.assertEqual(output, answer)
 
@@ -717,12 +719,12 @@ class Tester(unittest.TestCase):
                 answer = []
                 self.assertEqual(output, answer)
 
-                output = eval.eval([("ne",), [4, True]], {})
+                output = eval.eval([("ne",), [4, True]], ENV)
                 answer = [4, True]
                 self.assertEqual(output, answer)
 
                 l      = [("append",), [("ne",), ["abc", 5]], False]
-                output = eval.eval(l, {})
+                output = eval.eval(l, ENV)
                 answer = ["abc", 5, False]
                 self.assertEqual(output, answer)
 
@@ -735,20 +737,20 @@ class Tester(unittest.TestCase):
                           [addx, ("x",), [negx, ("y",)]]]
                 add5   = [("func",), [("x",)], [addx, ("x",), 5]]
 
-                output = eval.eval([add5, 100], {})
+                output = eval.eval([add5, 100], ENV)
                 answer = 105
                 self.assertEqual(output, answer)
 
-                output = eval.eval([sub, 57, 17], {})
+                output = eval.eval([sub, 57, 17], ENV)
                 answer = 40
                 self.assertEqual(output, answer)
 
-                output = eval.eval([sub, [add5, 10], [add5, 3]], {})
+                output = eval.eval([sub, [add5, 10], [add5, 3]], ENV)
                 answer = 7
                 self.assertEqual(output, answer)
 
                 l      = [sub, [add5, -6], [sub, [add5, 95], 900]]
-                output = eval.eval(l, {})
+                output = eval.eval(l, ENV)
                 answer = (-6 + 5) - ( (95 + 5) - 900 )
                 self.assertEqual(output, answer)
 

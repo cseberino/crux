@@ -96,7 +96,8 @@ def format_(output):
 
         return result
 
-env = {}
+env = [e for e in dir(eval) if e.startswith("eval_")]
+env = {(e[len("eval_"):],) : getattr(eval, e) for e in env}
 for d in os.walk(LIB):
         for f in d[2]:
                 for e in parse(open(os.path.join(d[0], f)).read()):
