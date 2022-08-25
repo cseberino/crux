@@ -148,8 +148,7 @@ def eval_macro(args, env):
                                         params, args_ = [params], [args_]
                                 env__ = {**env, **dict(zip(params, args_))}
                                 for e in args[1:]:
-                                        code   = eval(e,    env__)
-                                        result = eval(code, env_)
+                                        result = eval(eval(e, env__), env_)
 
                         return result
 
