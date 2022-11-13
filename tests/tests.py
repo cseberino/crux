@@ -25,7 +25,7 @@ import subprocess
 import string
 import re
 
-FUNC  = "<function (eval_{}|regular\.<locals>\.decor\.<locals>\.func_) "
+FUNC  = "<function (eval_{}|eval_args\.<locals>\.decor\.<locals>\.func_) "
 FUNC += "at 0x[0-9a-f]*>"
 ENV   = [e for e in dir(eval) if e.startswith("eval_")]
 ENV   = {(e[len("eval_"):],) : getattr(eval, e) for e in ENV}
@@ -210,8 +210,8 @@ class Tester(unittest.TestCase):
                 answer = 678
                 self.assertEqual(output, answer)
 
-        def test_regular(self):
-                func_  = eval.regular(3)(lambda args, extra : 999)
+        def test_eval_args(self):
+                func_  = eval.eval_args(3)(lambda args, extra : 999)
 
                 output = func_([1, 2], {})
                 answer = None

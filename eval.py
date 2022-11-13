@@ -53,7 +53,7 @@ def is_var_list(exp):
 
         return is_list(exp) and all(is_var(e) for e in exp)
 
-def regular(n_args, any_len = False):
+def eval_args(n_args, any_len = False):
         """
         Decorates.
         """
@@ -117,7 +117,7 @@ def eval_func(args, env):
 
         result = None
         if (len(args) >= 2) and (is_var(args[0]) or is_var_list(args[0])):
-                @regular(len(args[0]), is_var(args[0]))
+                @eval_args(len(args[0]), is_var(args[0]))
                 def func(args_, env_):
                         result = None
                         params = args[0]
@@ -156,7 +156,7 @@ def eval_macro(args, env):
 
         return result
 
-@regular(2)
+@eval_args(2)
 def eval_equal(args, env):
         """
         Helps.
@@ -164,7 +164,7 @@ def eval_equal(args, env):
 
         return args[0] == args[1]
 
-@regular(1)
+@eval_args(1)
 def eval_atom(args, env):
         """
         Helps.
@@ -172,7 +172,7 @@ def eval_atom(args, env):
 
         return is_atom(args[0])
 
-@regular(1)
+@eval_args(1)
 def eval_first(args, env):
         """
         Helps.
@@ -184,7 +184,7 @@ def eval_first(args, env):
 
         return result
 
-@regular(1)
+@eval_args(1)
 def eval_rest(args, env):
         """
         Helps.
@@ -196,7 +196,7 @@ def eval_rest(args, env):
 
         return result
 
-@regular(2)
+@eval_args(2)
 def eval_append(args, env):
         """
         Helps.
@@ -208,7 +208,7 @@ def eval_append(args, env):
 
         return result
 
-@regular(2)
+@eval_args(2)
 def eval_add(args, env):
         """
         Helps.
@@ -220,7 +220,7 @@ def eval_add(args, env):
 
         return result
 
-@regular(1)
+@eval_args(1)
 def eval_negate(args, env):
         """
         Helps.
@@ -232,7 +232,7 @@ def eval_negate(args, env):
 
         return result
 
-@regular(2)
+@eval_args(2)
 def eval_gt(args, env):
         """
         Helps.
