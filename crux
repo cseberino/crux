@@ -21,9 +21,9 @@ import os
 import sys
 
 BOOL  = "True|False"
-INT   = "\-?\d+"
-TOKEN = ('\s+|[\(\)]|#([^\n]*)(\n|$)|([^\s"\(\)]+|'
-                                   '"(\\\\"|[^"])*(?<=[^\\\\])")((?=[\s\)])|$)')
+INT   = r"\-?\d+"
+TOKEN = (r'\s+|[\(\)]|#([^\n]*)(\n|$)|([^\s"\(\)]+|'
+                                  r'"(\\\\"|[^"])*(?<=[^\\\\])")((?=[\s\)])|$)')
 LIB   = os.path.dirname(os.path.realpath(__file__)) + "/library"
 
 def tokenize(input_):
@@ -34,7 +34,7 @@ def tokenize(input_):
         tokens = []
         while input_:
                 token  = re.match(TOKEN, input_).group(0)
-                if not re.match("[\s#]", token[0]):
+                if not re.match(r"[\s#]", token[0]):
                         tokens.append(token)
                 input_ = input_[len(token):]
 
@@ -100,7 +100,9 @@ env = [e for e in dir(eval) if e.startswith("eval_")]
 env = {(e[len("eval_"):],) : getattr(eval, e) for e in env}
 for d in os.walk(LIB):
         for f in d[2]:
-                for e in parse(open(os.path.join(d[0], f)).read()):
-                        eval.eval(e, env)
-for e in parse(open(sys.argv[1]).read()):
-        print(format_(eval.eval(e, env)))
+                with open(os.path.join(d[0], f)) as f_:
+                        for e in parse(f_.read()):
+                                eval.eval(e, env)
+with open(sys.argv[1]) as f:
+        for e in parse(f.read()):
+                print(format_(eval.eval(e, env)))

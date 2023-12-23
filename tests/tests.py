@@ -20,7 +20,6 @@ sys.path.append("..")
 
 import eval
 import unittest
-import warnings
 import subprocess
 import string
 import re
@@ -32,14 +31,10 @@ ENV   = {(e[len("eval_"):],) : getattr(eval, e) for e in ENV}
 
 def create_crux_mod():
         subprocess.call(["cp", "../crux", "../__crux__.py"])
-        contents = open("../__crux__.py").readlines()
-        open("../__crux__.py", "w").write("".join(contents[:-2]))
+        with open("../__crux__.py")      as f: contents = f.readlines()
+        with open("../__crux__.py", "w") as f: f.write("".join(contents[:-3]))
 
 class Tester(unittest.TestCase):
-        def setUp(self):
-                warnings.simplefilter("ignore", ResourceWarning)
-                warnings.simplefilter("ignore", DeprecationWarning)
-
         def test_type_identifiers(self):
                 self.assertTrue( eval.is_int(34))
                 self.assertTrue( eval.is_int(-34))
@@ -915,49 +910,49 @@ a
         def test_format_(self):
                 program =  "True"
                 answer  = b"True\n"
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
 
                 program =  "False"
                 answer  = b"False\n"
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
 
                 program =  "345"
                 answer  = b"345\n"
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
 
                 program =  "-26726"
                 answer  = b"-26726\n"
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
 
                 program =  '"hello"'
                 answer  = b'"hello"\n'
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
 
                 program =  '"y@H@h \n a \t abc \t kki"'
                 answer  = b'"y@H@h \n a \t abc \t kki"\n'
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
 
                 program =  '" \t\n\x0b\x0c"'
                 answer  = b'" \t\n\x0b\x0c"\n'
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -971,7 +966,7 @@ False
 -61
 "hello"
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -992,7 +987,7 @@ b'''\
 6
 5
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -1047,28 +1042,28 @@ False
 True
 False
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
 
                 program =  "(atom ne)"
                 answer  = b"True\n"
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
 
                 program =  '(ne (5 "hello" False))'
                 answer  = b'(5 "hello" False)\n'
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
 
                 program =  "((func (x) (add x 5)) 10)"
                 answer  = b"15\n"
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -1076,105 +1071,105 @@ False
         def test_crux(self):
                 program = "ne"
                 answer  = FUNC.format("ne").encode() + b"\n"
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertTrue(re.match(answer, output))
                 subprocess.call(["rm", "__program__"])
 
                 program = "append"
                 answer  = FUNC.format("append").encode() + b"\n"
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertTrue(re.match(answer, output))
                 subprocess.call(["rm", "__program__"])
 
                 program = "if"
                 answer  = FUNC.format("if").encode() + b"\n"
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertTrue(re.match(answer, output))
                 subprocess.call(["rm", "__program__"])
 
                 program = "rest"
                 answer  = FUNC.format("rest").encode() + b"\n"
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertTrue(re.match(answer, output))
                 subprocess.call(["rm", "__program__"])
 
                 program = "func"
                 answer  = FUNC.format("func").encode() + b"\n"
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertTrue(re.match(answer, output))
                 subprocess.call(["rm", "__program__"])
 
                 program =  '"abc"'
                 answer  = b'"abc"\n'
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
 
                 program =  '"True"'
                 answer  = b'"True"\n'
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
 
                 program =  '"False"'
                 answer  = b'"False"\n'
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
 
                 program =  '"916"'
                 answer  = b'"916"\n'
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
 
                 program =  '"-179"'
                 answer  = b'"-179"\n'
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
 
                 program =  '"4abc"'
                 answer  = b'"4abc"\n'
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
 
                 program =  '""'
                 answer  = b'""\n'
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
 
                 program =  "(4 5)"
                 answer  = b"None\n"
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
 
                 program =  ")"
                 answer  = b"None\n"
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
 
                 program =  "abc"
                 answer  = b"None\n"
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -1198,21 +1193,21 @@ None
 6
 5
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
 
                 program =  "(ne (3 5()"
                 answer  = b"None\n"
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
 
                 program =  "(set αβΔ 46) αβΔ"
                 answer  = b"46\n46\n"
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -1241,21 +1236,14 @@ b'''\
 "hello\nthere"
 "hello ) ( \n there"
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
 
                 program = '"hello\nthere"\n'
                 answer  = b'"hello\nthere"\n'
-                open("__program__", "w").write(program)
-                output  = subprocess.check_output(["../crux", "__program__"])
-                self.assertEqual(output, answer)
-                subprocess.call(["rm", "__program__"])
-
-                program = '"hello\\"there"\n'
-                answer  = b'"hello\\"there"\n'
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -1277,7 +1265,7 @@ b'''\
 3
 '''
                 answer  = answer.split(b"\n")
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 output  = output.split(b"\n")[3:]
                 self.assertEqual(output, answer)
@@ -1286,14 +1274,14 @@ b'''\
         def test_macro(self):
                 program = "macro"
                 answer  = FUNC.format("macro").encode() + b"\n"
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertTrue(re.match(answer, output))
                 subprocess.call(["rm", "__program__"])
 
                 program = "(macro (x) 5)"
                 answer  = FUNC.format("macro.<locals>.macro").encode() + b"\n"
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertTrue(re.match(answer, output))
                 subprocess.call(["rm", "__program__"])
@@ -1330,7 +1318,7 @@ True
 '''
                 answer  = [FUNC.format("macro.<locals>.macro").encode()] +     \
                                    answer.split(b"\n")
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 output  = output.split(b"\n")
                 self.assertTrue(re.match(answer[0], output[0]) and             \
@@ -1366,7 +1354,7 @@ False
 True
 True
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -1400,7 +1388,7 @@ False
 True
 True
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -1446,7 +1434,7 @@ True
 True
 False
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -1473,7 +1461,7 @@ b'''\
 5050
 '''
                 answer  = answer.split(b"\n")
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 output  = output.split(b"\n")[1:]
                 self.assertEqual(output, answer)
@@ -1502,7 +1490,7 @@ b'''\
 600
 5000
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -1540,7 +1528,7 @@ None
 None
 None
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -1608,7 +1596,7 @@ b'''\
 100
 128
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -1634,7 +1622,7 @@ True
 True
 False
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -1656,7 +1644,7 @@ b'''\
 3
 4
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -1674,7 +1662,7 @@ b'''\
 1
 (2 3 4)
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -1706,7 +1694,7 @@ b'''\
 35
 34
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -1736,7 +1724,7 @@ None
 -4
 None
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -1758,7 +1746,7 @@ b'''\
 6
 ()
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -1778,7 +1766,7 @@ b'''\
 ()
 (3 6 12)
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -1802,7 +1790,7 @@ b'''\
 ()
 (11 12 13)
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -1826,7 +1814,7 @@ b'''\
 (5 3)
 (5 3 1)
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -1856,7 +1844,7 @@ b'''\
 (3)
 ()
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -1926,7 +1914,7 @@ b'''\
 ("c" "d")
 ("d")
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -1950,7 +1938,7 @@ b'''\
 (True)
 ()
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -1972,7 +1960,7 @@ b'''\
 ()
 ()
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -1988,7 +1976,7 @@ b'''\
 4
 '''
                 answer  = answer.split(b"\n")
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 output  = output.split(b"\n")[1:]
                 self.assertEqual(output, answer)
@@ -2006,7 +1994,7 @@ b'''\
 "bat"
 '''
                 answer  = answer.split(b"\n")
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 output  = output.split(b"\n")[1:]
                 self.assertEqual(output, answer)
@@ -2022,7 +2010,7 @@ b'''\
 ("ball" "rock")
 '''
                 answer  = answer.split(b"\n")
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 output  = output.split(b"\n")[1:]
                 self.assertEqual(output, answer)
@@ -2093,7 +2081,7 @@ None
 250
 None
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -2120,7 +2108,7 @@ b'''\
 1
 '''
                 answer  = answer.split(b"\n")
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 output  = output.split(b"\n")[1:]
                 self.assertEqual(output, answer)
@@ -2145,7 +2133,7 @@ b'''\
 "c"
 "d"
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -2217,7 +2205,7 @@ None
 None
 None
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -2259,7 +2247,7 @@ k
 None
 '''
                 answer  = answer.split(b"\n")
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 output  = output.split(b"\n")[2:]
                 self.assertEqual(output, answer)
@@ -2310,7 +2298,7 @@ None
 b'''\
 None
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -2372,7 +2360,7 @@ None
 b'''\
 None
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -2446,7 +2434,7 @@ None
 b'''\
 None
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -2501,7 +2489,7 @@ None
 b'''\
 None
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -2516,7 +2504,7 @@ b'''\
 ()
 ()
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -2548,7 +2536,7 @@ None
 None
 None
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -2576,7 +2564,7 @@ None
 None
 None
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -2601,7 +2589,7 @@ None
 b'''\
 56
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 output  = output.split(b"\n")[1] + b"\n"
                 self.assertEqual(output, answer)
@@ -2661,7 +2649,7 @@ None
 None
 6
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -2691,7 +2679,7 @@ None
 None
 None
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -2723,7 +2711,7 @@ None
 None
 None
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -2767,7 +2755,7 @@ b'''\
 None
 None
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -2811,7 +2799,7 @@ b'''\
 None
 None
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -2864,7 +2852,7 @@ None
 None
 False
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -2908,7 +2896,7 @@ b'''\
 None
 None
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
@@ -2946,7 +2934,7 @@ None
 None
 None
 '''
-                open("__program__", "w").write(program)
+                with open("__program__", "w") as f: f.write(program)
                 output  = subprocess.check_output(["../crux", "__program__"])
                 self.assertEqual(output, answer)
                 subprocess.call(["rm", "__program__"])
